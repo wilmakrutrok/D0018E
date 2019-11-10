@@ -1,0 +1,84 @@
+body {
+	font-family: "Times New Roman", Times;
+	margin: 0;
+	padding: 0;
+}
+
+header {
+	border-bottom: 1px solid #e6e6e6;
+	font-size: 20px;
+	color: gray;
+	background-color: white;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+ul {
+	list-style-type: none;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	display: block;	
+	float: left;
+	text-align: center;
+	padding: 14px 16px;
+	color: black;
+}
+
+li a {
+	color: gray;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+li a:hover {
+	color: black;
+}
+
+main {
+	margin-top: 50px;
+	text-align: center;
+}
+
+#background {
+	background-image: url("background.jpg");
+	line-height: 300px;
+	height: 300px;
+	text-align: center;
+	color: white;
+}
+
+.login {
+	margin: -250px 34%;
+	width: 400px;
+	height: 300px;
+	color: black;
+	text-align: center;
+	background-color: #e6e6e6;
+	position: absolute;
+	line-height: 25px;
+}
+
+.login h1 {
+	padding-top: 30px;
+}
+
+table {
+	text-align: left;
+	width:50%; 
+    margin-left:25%; 
+    margin-right:25%;
+}
+
+footer {
+	border-top: 1px solid #e6e6e6;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	padding-left: 20px;
+	color: gray;
+}
