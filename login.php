@@ -1,6 +1,6 @@
 <?php 
 include "config.php";
-
+session_start();
 if(isset($_POST['submit'])){
     $uname = mysqli_real_escape_string($conn,$_POST['username']);
     $password = mysqli_real_escape_string($conn,$_POST['password']);

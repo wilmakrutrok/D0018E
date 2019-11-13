@@ -1,5 +1,5 @@
 <?php 
-    session_start();
+    //session_start();
     $servername = "utbweb.its.ltu.se";
     $user = "980728";
     $password = "123wow234";
