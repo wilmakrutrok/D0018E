@@ -1,6 +1,4 @@
 <?php 
-include "config.php";
-session_start();
 if(isset($_POST['submit'])){
     $uname = mysqli_real_escape_string($conn,$_POST['username']);
     $password = mysqli_real_escape_string($conn,$_POST['password']);
@@ -14,6 +12,7 @@ if(isset($_POST['submit'])){
 
         if($count > 0){
             $_SESSION['uname'] = $uname;
+            $_SESSION['loggedin'] = true;
             header('Location: index.php');
         }else{
             echo "Invalid username and password";
