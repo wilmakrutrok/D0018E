@@ -1,13 +1,18 @@
 <?php 
+include "config.php";
 if(isset($_POST['submit'])){
-    $uname = mysqli_real_escape_string($conn,$_POST['username']);
+    /*$uname = mysqli_real_escape_string($conn,$_POST['username']);
+    echo $uname;
     $password = mysqli_real_escape_string($conn,$_POST['password']);
-    $password2 = mysqli_real_escape_string($conn,$_POST['password2']);
+    $password2 = mysqli_real_escape_string($conn,$_POST['password2']);*/
+    $uname=$_POST['username'];
+    $password=$_POST['password'];
+    $password2=$_POST['password2'];
     if ($password != $password2){
         echo"Password does not match";
     }elseif ($uname != "" && $password != "") {
          $sql_query = "select count(*) as cntUser
-          from Users where username='".$uname."'";
+          from users where username='".$uname."'";
           $result = mysqli_query($conn,$sql_query);
           $row = mysqli_fetch_array($result);
           $count = $row['cntUser'];
@@ -15,16 +20,14 @@ if(isset($_POST['submit'])){
             echo'Username already exists.';
           }
           else{
-            $sql_query="INSERT INTO users(username, password)
+            $sql_query="INSERT INTO users (username, password)
                         VALUES ('".$uname."', '".$password."')";
             $newuser_add = mysqli_query($conn,$sql_query);
-            //Page routing?
+            header('Location: index.php');
           }
 
-    }
-
-	else {
-		echo "No username or password given";
+    }else {
+		echo "No username or password given ";
 	}
 }
 ?>
@@ -54,7 +57,7 @@ if(isset($_POST['submit'])){
         	</footer>
         </div>
         <div class="login">
-        	<h1>Log in</h1>
+        	<h1>Sign up</h1>
         	<form action="" method="post">
                 Username:<br>
                 <input type="text" name="username" id="signup_uname" placeholder="Enter Username"><br>

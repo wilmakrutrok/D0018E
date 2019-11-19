@@ -58,7 +58,7 @@ if(isset($_POST['submit'])){
                 <input type="text" name="password" id="login_pwd" placeholder="Enter Password"><br><br>
                 <input type="submit" value="Login" name="submit">
             </form>
-            <p>Don't have an account? <a style="color:gray;">Sign up now.</a></p>
+            <p>Don't have an account? <a href="signup.php" style="color:gray;">Sign up now.</a></p>
         </div>
     </body>
 </html>
