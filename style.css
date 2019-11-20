@@ -53,14 +53,14 @@ main {
 }
 
 .login {
-	margin: -250px 34%;
+	margin: -270px 35%;
 	width: 400px;
-	height: 300px;
+	height: 400px;
 	color: black;
 	text-align: center;
 	background-color: #e6e6e6;
-	position: absolute;
 	line-height: 25px;
+	position: absolute;
 }
 
 .login h1 {
