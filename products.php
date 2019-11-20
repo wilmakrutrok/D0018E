@@ -1,33 +1,57 @@
 <?php 
 template_header('products');
 template_footer();
+if($_SESSION['loggedin'] != true){
+    header('Location: index.php');
+}
 ?>
-
+	<div class="products">
 	<h1>Products</h1>
     <div class="container">
     <?php 
         $uname = $_SESSION['uname'];
-        	
-        $query_getuid= "select iduser from Users where username='".$uname."'";
+        
+        //find user ID
+        $query_getuid= "select iduser from users where username='".$uname."'";
         $result_uid = mysqli_query($conn, $query_getuid);
         $uid = mysqli_fetch_array($result_uid);
         	
         if(isset($_POST['add'])){
-            $query_add = "INSERT INTO Cart (iduser, idproduct, numberof) VALUES ('".$uid['iduser']."', '".$_POST["idproduct"]."', '1')";
-        	$result_add = mysqli_query($conn,$query_add);
+            
+            //Search if user has a cart. If no is found one is created.
+            $count_query = "select count(*) as cntUser from carttouser where iduser='".$uid['iduser']."'";
+            $result = mysqli_query($conn, $count_query);
+            $row = mysqli_fetch_array($result);
+            $count = $row['cntUser'];
+            
+            if($count == 0){
+                $query_adduser = "INSERT INTO carttouser (iduser) VALUES ('".$uid['iduser']."')";
+                $result_add = mysqli_query($conn,$query_adduser);
+            }
+            
+            //Fin Cart ID for the user
+            $query_getCartID = "SELECT idcart from carttouser where iduser='".$uid['iduser']."' ";
+            $result = mysqli_query($conn, $query_getCartID);
+            $cartid = mysqli_fetch_array($result);
+            
+            //Adding the product to the cart that belongs to the user, if product already in cart update the amount
+            $add_product_query="INSERT INTO cartproducts (idcart, idproduct, amount)
+                                VALUES ('".$cartid['idcart']."', '".$_POST["idproduct"]."', '1')
+                                ON DUPLICATE KEY UPDATE amount = amount + 1";
+            $result_add = mysqli_query($conn,$add_product_query);
         }
         	
-    	$query_producttable = "SELECT name, description, price, inventory, idproduct FROM Products";
+    	$query_producttable = "SELECT name, description, price, inventory, idproduct FROM products";
     	$result_producttable = $conn->query($query_producttable);
     	
     	if ($result_producttable->num_rows > 0) {
     	    while($product = $result_producttable->fetch_assoc()) {
                 ?>
     	        <form method="post">
-    	        	<?php echo $product["name"]?>
-    	        	<?php echo $product["price"]?>
-    	        	<?php echo $product["description"]?>
-    	        	<input type="hidden" name="iduser" value="<?php echo $uid['iduser']?>">
+    	        	<?php echo $product["name"]?><br>
+    	        	<?php echo $product["price"]." :-"?><br>
+    	        	<?php echo $product["description"]?><br>
+    	        	<input type="hidden" name="iduser" value="<?php echo $uid["iduser"]?>">
 					<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>">
     	        	<input type="submit" name="add" value="Add to cart">
     	        </form>
@@ -35,6 +59,7 @@ template_footer();
     	    }
     	    $conn->close();
     	}
-        ?>  
+        ?> 
+        </div> 
     </div> 
      
