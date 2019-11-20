@@ -67,6 +67,27 @@ main {
 	padding-top: 30px;
 }
 
+.products {
+	margin-top: 100px;
+	text-align: center;
+}
+
+.container {
+	display: block;
+ 	margin-left: 25%;
+ 	margin-right: 15%;
+ 	widht: 60%;
+}
+
+.container form {
+	float: left;
+	text-align: left;
+	border-top: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
+	padding: 20px;
+	line-height: 20px;
+}
+
 table {
 	text-align: left;
 	width:50%; 
