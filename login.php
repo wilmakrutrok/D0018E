@@ -7,17 +7,26 @@ if(isset($_POST['submit'])){
     
     if ($uname != "" && $password != ""){
         
-        $sql_query = "select count(*) as cntUser from users where username='".$uname."' and password='".$password."'";
+       // $sql_query = "select count(*) as cntUser from users where username='".$uname."' and password='".$password."'";
+        $sql_query = "select count(*) as cntUser from users where username='".$uname."'";
         $result = mysqli_query($conn,$sql_query);
         $row = mysqli_fetch_array($result);
         $count = $row['cntUser'];
         
         if($count > 0){
-            $_SESSION['uname'] = $uname;
-            $_SESSION['loggedin'] = true;
-            header('Location: index.php?page=home');
+            $sql_query = "select password from users where username='".$uname."'";
+            $result = mysqli_query($conn,$sql_query);
+            $row = mysqli_fetch_array($result);
+            $hashed_pwd = $row['password'];
+            if (password_verify($password, $hashed_pwd)){
+                $_SESSION['uname'] = $uname;
+                $_SESSION['loggedin'] = true;
+                header('Location: index.php?page=home');
+            }else{
+                echo "Invalid Password";
+            }
         }else{
-            echo "Invalid username and password";
+            echo "Invalid Username";
         }
     }
     else {
