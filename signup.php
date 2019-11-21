@@ -36,9 +36,9 @@ if(isset($_POST['submit'])){
             Username:<br>
             <input type="text" name="username" id="signup_uname" placeholder="Enter Username"><br>
             Password:<br>
-            <input type="text" name="password" id="signup_pwd" placeholder="Enter Password"><br>
+            <input type="password" name="password" id="signup_pwd" placeholder="Enter Password"><br>
             Confirm Password:<br>
-            <input type="text" name="password2" id="signup_pwd2" placeholder="Confirm Password"><br><br>
+            <input type="password" name="password2" id="signup_pwd2" placeholder="Confirm Password"><br><br>
             <input type="submit" value="Sign up" name="submit">
         </form>
         <p>Already have an account? <a href="index.php?page=login" style="color:gray;">Login now.</a></p>
