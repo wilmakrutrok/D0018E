@@ -18,8 +18,9 @@ if(isset($_POST['submit'])){
             echo'Username already exists.';
           }
           else{
+            $hash=password_hash("$password", PASSWORD_DEFAULT);
             $sql_query2="INSERT INTO users (username, password)
-                        VALUES ('".$uname."', '".$password."')";
+                        VALUES ('".$uname."', '".$hash."')";
             $newuser_add = mysqli_query($conn,$sql_query2);
             header('Location: index.php?page=home');
           }
