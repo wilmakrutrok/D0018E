@@ -11,6 +11,12 @@
     $db_name = "db980728";
     $db = mysqli_select_db($conn, $db_name);     
 
+    function logged_in(){
+        if($_SESSION['loggedin'] != true){
+            header('Location: index.php');
+        }
+    }
+    
     function template_header($title){
         
    echo '
