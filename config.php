@@ -1,14 +1,14 @@
 <?php 
-    $servername = "utbweb.its.ltu.se";
-    $user = "980728";
-    $password = "123wow234";
+    $servername = "localhost";
+    $user = "andre";
+    $password = "password";
     
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
         }
     
-    $db_name = "db980728";
+    $db_name = "test";
     $db = mysqli_select_db($conn, $db_name);     
 
     function logged_in(){

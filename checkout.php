@@ -1,7 +1,12 @@
 <!DOCTYPE html>
+<?php 
+logged_in();
+template_header('checkout');
+template_footer();
+?>
 <html>
 
-
+<!--
     	<head>
     		<title>The store</title>
     		<link rel="stylesheet" href="style.css">
@@ -25,6 +30,7 @@
 			     
         	</footer>
         </body>
+-->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -138,21 +144,27 @@ span.price {
 
 
 
-        </label>
+        <!--</label>
 
       </form>
     </div>
   </div>
+-->
+
   <div class="col-25">
     <div class="container">
-      <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>4</b></span></h4>
+      <h4>Cart <span class="price" style="color:black">
+        <i class="fa fa-shopping-cart"></i> 
+          <b>4</b></span>
+      </h4>
+
+
+  
 
 
 
 <?php
-logged_in();
-        
-    	$query_producttable = "SELECT name, description, price, inventory, idproduct FROM products";
+      /*$query_producttable = "SELECT name, description, price, inventory, idproduct FROM products";
     	$result_producttable = $conn->query($query_producttable);
     	$total = 0;
     	if ($result_producttable->num_rows > 0) {
@@ -170,16 +182,39 @@ logged_in();
     	    }
     	    $conn->close();
     	}
+      */
 
+      //Hämtar först ut användarens id
+      $uname = $_SESSION['uname'];
+      $query_getuid= "select iduser from users where username='".$uname."'";
+      $result_uid = mysqli_query($conn, $query_getuid);
+      $uid = mysqli_fetch_array($result_uid);
 
-?>
+      //Här hämtar jag ut alla produkter som finns i kundkorgen. Priset borde hämtas från cartproductstabellen men den är null där så hämtar från products direkt för nu
+      $query_cart = "SELECT  products.name, products.price, cartproducts.amount FROM carttouser 
+      INNER JOIN cartproducts ON carttouser.idcart = cartproducts.idcart 
+      INNER JOIN products ON cartproducts.idproduct = products.idproduct
+      WHERE carttouser.iduser = '".$uid['iduser']."'";
+      $result_cart = $conn->query($query_cart);
+      //Här skrivs allting från korgen ut
+      if($result_cart->num_rows > 0){
+        while($cart = $result_cart->fetch_assoc()){
+          ?>
+          <p><?php echo $cart["name"]?><span class="price"><?php echo $cart["price"] ?></span></p>
+          <?php
+        }
+         $conn->close();
+      }
+    
+?><!--
       <p><a href="#">Product 3</a> <span class="price">$8</span></p>
       <p><a href="#">Product 4</a> <span class="price">$2</span></p>
       <hr>
       <p>Total <span class="price" style="color:black"><b><?php $total?></b></span></p>
-
+    --->
     </div>
   </div>
-</div>
+
 
 </body>
+</html>
