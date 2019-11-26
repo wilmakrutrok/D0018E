@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
 
 
     	<head>
@@ -147,12 +146,38 @@ span.price {
   <div class="col-25">
     <div class="container">
       <h4>Cart <span class="price" style="color:black"><i class="fa fa-shopping-cart"></i> <b>4</b></span></h4>
-      <p><a href="#">Product 1</a> <span class="price">$15</span></p>
-      <p><a href="#">Product 2</a> <span class="price">$5</span></p>
+
+
+
+<?php
+logged_in();
+        
+    	$query_producttable = "SELECT name, description, price, inventory, idproduct FROM products";
+    	$result_producttable = $conn->query($query_producttable);
+    	$total = 0;
+    	if ($result_producttable->num_rows > 0) {
+    	    while($product = $result_producttable->fetch_assoc()) {
+                ?>
+                
+    	        <form method="post">
+			$price = $product["price"];
+    	        	<?php echo $product["name"]?>    	        	
+			<?php echo $product["price"]." :-"?><br>
+			$total = $price + $total
+    	        </form>
+    	      
+  			<?php 
+    	    }
+    	    $conn->close();
+    	}
+
+
+?>
       <p><a href="#">Product 3</a> <span class="price">$8</span></p>
       <p><a href="#">Product 4</a> <span class="price">$2</span></p>
       <hr>
-      <p>Total <span class="price" style="color:black"><b>$30</b></span></p>
+      <p>Total <span class="price" style="color:black"><b><?php $total?></b></span></p>
+
     </div>
   </div>
 </div>
