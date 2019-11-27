@@ -12,14 +12,42 @@
   //Här hämtar jag ut alla produkter som finns i kundkorgen. 
   //Priset borde hämtas från cartproductstabellen men den är 
   //null där så hämtar från products direkt för nu
-  $query_cart = "SELECT  products.name, products.price, cartproducts.amount FROM carttouser 
-  INNER JOIN cartproducts ON carttouser.idcart = cartproducts.idcart 
-  INNER JOIN products ON cartproducts.idproduct = products.idproduct
+  $query_cart = "SELECT  products.name, products.price, cartproducts.amount 
+  FROM carttouser 
+  INNER JOIN cartproducts 
+    ON carttouser.idcart = cartproducts.idcart 
+  INNER JOIN products 
+    ON cartproducts.idproduct = products.idproduct
   WHERE carttouser.iduser = '".$uid['iduser']."'";
   $result_cart = $conn->query($query_cart);
+
+
+
+  if(isset($_POST['pay_button'])){  
+ /*
+  $query_create_order = "INSERT INTO orders(iduser)
+  VALUES('".$uid['iduser']."')";
+  mysqli_query($conn, $query_create_order);
+  $order_id = $conn->insert_id;
+  //Lägg in orderid och resten av informationen
+  $query_orderdetails = "INSERT INTO orderproducts(idorder, idproduct, price, amount)
+  SELECT ?, products.idproduct, products.price, cartproducts.amount 
+  FROM carttouser 
+  INNER JOIN cartproducts 
+    ON carttouser.idcart = cartproducts.idcart 
+  INNER JOIN products 
+    ON cartproducts.idproduct = products.idproduct
+  WHERE carttouser.iduser = ?";
+  $stmt = $conn->prepare($query_orderdetails);
+  $stmt -> bind_param('is',$order_id, $uid['iduser']);
+  $stmt -> execute();
+  //mysqli_query($conn, $query_orderdetails);
+  */
+}
 ?>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+-->
 
 <style>
 body {
@@ -130,8 +158,12 @@ span.cart {
   padding: 2% 2%;
 }
 form {
-  float:right;
+  float:left;
   border:0%;
+  padding:0px;
+}
+.container form {
+  padding: 20px;
 }
 </style>
 
@@ -170,8 +202,8 @@ form {
           <td class="total"><h4>Total Price:</h4> </td>
           <td class = "total"><h4> <?php  echo $total_price ?></h4></td>
          </tr>
-         <tr>
-          <td><button type="button">Pay</button></td>
+         <tr><td>
+          <form method="post"><input type="submit" name="pay_button" value="Pay"></button></form></td>
          </tr>
     </tbody>
          <?php } $conn->close(); ?> 
