@@ -107,6 +107,7 @@ th{
 }
 tbody{
   width: 95%;
+  
 }
 span.price {
   float: right;
@@ -149,7 +150,7 @@ form {
       <?php
         //Everything from the cart is displayed in different cells a new row for every product.
       if($result_cart->num_rows > 0){
-        $total_price;
+        $total_price = 0;
         while($cart = $result_cart->fetch_assoc()){
       ?>
       <tr>
@@ -160,13 +161,14 @@ form {
         -->
         <td><?php echo $cart["amount"]?><button type="button">Change</button></td>
         <td class="total"><?php $total_product = $cart["price"] * $cart["amount"]; 
+              $total_price = $total_price + $total_product;
               echo $total_product ?></td>
         <?php } ?>
         <!-----While-loop Ends------>
          </tr>
          <tr>
           <td class="total"><h4>Total Price:</h4> </td>
-          <td class = "total"><h4> <?php  echo $total_product ?></h4></td>
+          <td class = "total"><h4> <?php  echo $total_price ?></h4></td>
          </tr>
          <tr>
           <td><button type="button">Pay</button></td>
