@@ -2,13 +2,16 @@
 <?php 
   logged_in();
   template_header('checkout');
+  template_footer();
   //Hämtar först ut användarens id
   $uname = $_SESSION['uname'];
   $query_getuid= "select iduser from users where username='".$uname."'";
   $result_uid = mysqli_query($conn, $query_getuid);
   $uid = mysqli_fetch_array($result_uid);
+
   //Här hämtar jag ut alla produkter som finns i kundkorgen. 
   //Priset borde hämtas från cartproductstabellen men den är 
+  //null där så hämtar från products direkt för nu
   $query_cart = "SELECT  products.name, products.price, cartproducts.amount FROM carttouser 
   INNER JOIN cartproducts ON carttouser.idcart = cartproducts.idcart 
   INNER JOIN products ON cartproducts.idproduct = products.idproduct
@@ -64,7 +67,6 @@ input[type=text] {
   border: 1px solid #ccc;
   border-radius: 3px;
 }
-
 label {
   margin-bottom: 10px;
   display: block;
