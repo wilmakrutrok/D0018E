@@ -1,38 +1,29 @@
 body {
-	font-family: "Times New Roman", Times;
 	margin: 0;
 	padding: 0;
 }
 
 header {
 	border-bottom: 1px solid #e6e6e6;
-	font-size: 20px;
-	color: gray;
-	background-color: white;
 	position: fixed;
-	top: 0;
 	width: 100%;
+	background-color: white;
+	top: 0;
+	font-size: 20px;
 }
 
 ul {
 	list-style-type: none;
-	overflow: hidden;
 	margin: 0;
 	padding: 0;
 }
 
-li {
-	display: block;	
-	float: left;
-	text-align: center;
-	padding: 14px 16px;
-	color: black;
-}
-
 li a {
+	float: left;
+	display: block;
 	color: gray;
-	padding: 14px 16px;
 	text-decoration: none;
+	padding: 14px 16px;
 }
 
 li a:hover {
@@ -41,26 +32,24 @@ li a:hover {
 
 main {
 	margin-top: 50px;
-	text-align: center;
 }
 
 #background {
 	background-image: url("background.jpg");
-	line-height: 300px;
 	height: 300px;
 	text-align: center;
 	color: white;
+	line-height: 300px;
 }
 
 .login {
-	margin: -270px 35%;
+	background-color: #e6e6e6;
 	width: 400px;
 	height: 400px;
-	color: black;
-	text-align: center;
-	background-color: #e6e6e6;
 	line-height: 25px;
+	text-align: center;
 	position: absolute;
+	margin: -270px 35%;
 }
 
 .login h1 {
@@ -73,33 +62,45 @@ main {
 }
 
 .container {
+	widht: 50%;
 	display: block;
- 	margin-left: 25%;
- 	margin-right: 15%;
- 	widht: 60%;
 }
 
 .container form {
 	float: left;
-	text-align: left;
 	border-top: 1px solid #e6e6e6;
 	border-bottom: 1px solid #e6e6e6;
 	padding: 20px;
 	line-height: 20px;
+	text-align: left;
 }
 
-table {
-	text-align: left;
-	width:50%; 
-    margin-left:25%; 
-    margin-right:25%;
+.container img {
+	height: 100px;
+}
+
+.container a {
+	color: black;
+}
+
+.product {
+	margin-top: 150px;
+	widht: 50%;
+	display: block;	
+}
+
+.product img {
+	height: 200px;
+	float: left;
+	padding-right: 30px;
 }
 
 footer {
 	border-top: 1px solid #e6e6e6;
-	position: fixed;
 	bottom: 0;
-	width: 100%;
-	padding-left: 20px;
 	color: gray;
+	position: fixed;
+	width: 100%;
+	background-color: white;
+	padding-left: 20px;
 }

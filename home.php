@@ -1,5 +1,5 @@
 <?php
-
+logged_in();
 template_header('home');
 template_footer();
 

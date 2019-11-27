@@ -8,7 +8,7 @@ template_footer();
     <div class="container">
     <?php 
         
-    	$query_producttable = "SELECT name, description, price, inventory, idproduct FROM products";
+    	$query_producttable = "SELECT name, description, price, inventory, idproduct, image FROM products";
     	$result_producttable = $conn->query($query_producttable);
     	
     	if ($result_producttable->num_rows > 0) {
@@ -16,6 +16,7 @@ template_footer();
                 ?>
                 <a href="index.php?page=product&id=<?=$product['idproduct']?>">
     	        <form method="post">
+    	        	<img src="<?php echo $product["image"]?>"><br>
     	        	<?php echo $product["name"]?><br>
     	        	<?php echo $product["price"]." :-"?><br>
     	        </form>
