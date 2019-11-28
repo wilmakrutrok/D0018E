@@ -11,7 +11,8 @@
   //Här hämtar jag ut alla produkter som finns i kundkorgen. 
   //Priset borde hämtas från cartproductstabellen men den är 
   //null där så hämtar från products direkt för nu
-  $query_cart = "SELECT  products.name, products.price, cartproducts.amount 
+  $query_cart = "
+  SELECT  products.name, products.price, cartproducts.amount 
   FROM carttouser 
   INNER JOIN cartproducts 
     ON carttouser.idcart = cartproducts.idcart 
@@ -22,7 +23,7 @@
 
 
 
-  
+  //Enters when pay button is pressed
   if(isset($_POST['pay_button'])){  
 
   //Create a new order. IDorder is incremented automatically 
@@ -32,20 +33,32 @@
   mysqli_query($conn, $query_create_order);
   //Use the generated IDorder to update orderproducts
   $order_id = $conn->insert_id;
-  //Lägg in orderid och resten av informationen
-  $query_orderdetails = "INSERT INTO orderproducts(idorder, idproduct, price, amount)
-  SELECT ?, products.idproduct, products.price, cartproducts.amount 
-  FROM carttouser 
+
+  //Inserting products from cart to orders
+  $stmt =$conn->prepare("INSERT INTO orderproducts
+  SELECT orders.idorder, cartproducts.idproduct, cartproducts.amount, cartproducts.price
+  FROM orders 
+  INNER JOIN carttouser
+  on orders.iduser = carttouser.iduser
   INNER JOIN cartproducts 
     ON carttouser.idcart = cartproducts.idcart 
   INNER JOIN products 
     ON cartproducts.idproduct = products.idproduct
-  WHERE carttouser.iduser = ?";
-  $stmt = $conn->prepare($query_orderdetails);
-  $stmt -> bind_param('is',$order_id, $uid['iduser']);
-  $stmt -> execute();
-  //mysqli_query($conn, $query_orderdetails);
-  */
+  WHERE orders.idorder = ?");
+  $stmt->bind_param('i', $order_id);
+  $stmt->execute();
+
+  //Emptying all the products in the cart
+  $delete_cart = "
+  DELETE  cartproducts 
+  FROM cartproducts 
+  INNER JOIN carttouser 
+  ON carttouser.idcart = cartproducts.idcart 
+  WHERE carttouser.iduser = '".$uid['iduser']."'";
+  mysqli_query($conn, $delete_cart);
+
+  //Sends the user back to checkout page
+  header('Location: index.php?page=checkout');
 }
 ?>
 <!--<meta name="viewport" content="width=device-width, initial-scale=1">
