@@ -1,14 +1,14 @@
 <?php 
     $servername = "localhost";
-    $user = "andre";
-    $password = "password";
+    $user = "root";
+    $password = "";
     
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
         }
     
-    $db_name = "test";
+    $db_name = "d0018e";
     $db = mysqli_select_db($conn, $db_name);     
 
     function logged_in(){
@@ -30,7 +30,7 @@
             	<ul>
             		<li><a href="index.php?page=home">Home</a></li>
             		<li><a href="index.php?page=products">Products</a></li>
-            		<li style="margin-left: 25%;"><a href="index.php?page=home" style="color: black;">The store</a></li>
+            		<li><a href="index.php?page=home" style="color: black;">The store</a></li>
             		<li style="float: right"><a href="index.php?page=checkout">Checkout</a></li>
             	</ul>
             </header>
@@ -61,7 +61,7 @@
             	<ul>
             		<li><a>Home</a></li>
             		<li><a>Products</a></li>
-            		<li style="margin-left: 25%;"><a style="color: black;">The store</a></li>
+            		<li><a style="color: black;">The store</a></li>
             		<li style="float: right"><a>Checkout</a></li>
             	</ul>
             </header>

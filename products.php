@@ -1,7 +1,6 @@
 <?php 
 logged_in();
 template_header('products');
-template_footer();
 ?>
 	<div class="products">
 	<h1>Products</h1>
@@ -29,4 +28,4 @@ template_footer();
         ?>
         </ul>
     </div> 
-     
+<?php template_footer();?>

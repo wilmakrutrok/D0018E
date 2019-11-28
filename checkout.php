@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <?php 
   logged_in();
   template_header('checkout');
-  template_footer();
+  
   //Hämtar först ut användarens id
   $uname = $_SESSION['uname'];
   $query_getuid= "select iduser from users where username='".$uname."'";
@@ -20,12 +19,8 @@
     ON cartproducts.idproduct = products.idproduct
   WHERE carttouser.iduser = '".$uid['iduser']."'";
   $result_cart = $conn->query($query_cart);
-
-
-
   //Enters when pay button is pressed
   if(isset($_POST['pay_button'])){  
-
   //Create a new order. IDorder is incremented automatically 
   //so each new order is unique
   $query_create_order = "INSERT INTO orders(iduser)
@@ -33,7 +28,6 @@
   mysqli_query($conn, $query_create_order);
   //Use the generated IDorder to update orderproducts
   $order_id = $conn->insert_id;
-
   //Inserting products from cart to orders
   $stmt =$conn->prepare("INSERT INTO orderproducts
   SELECT orders.idorder, cartproducts.idproduct, cartproducts.amount, cartproducts.price
@@ -47,7 +41,6 @@
   WHERE orders.idorder = ?");
   $stmt->bind_param('i', $order_id);
   $stmt->execute();
-
   //Emptying all the products in the cart
   $delete_cart = "
   DELETE  cartproducts 
@@ -56,7 +49,6 @@
   ON carttouser.idcart = cartproducts.idcart 
   WHERE carttouser.iduser = '".$uid['iduser']."'";
   mysqli_query($conn, $delete_cart);
-
   //Sends the user back to checkout page
   header('Location: index.php?page=checkout');
 }
@@ -65,7 +57,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 -->
 
-<body>
   <div class="container">
     <table>
       <th>
@@ -108,7 +99,4 @@
   </table>
   </div>
   </div>
-
-
-</body>
-</html>
+<?php template_footer();?>

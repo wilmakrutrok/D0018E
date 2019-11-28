@@ -1,6 +1,6 @@
 <?php
 template_header_login('login');
-template_footer();
+
 if(isset($_POST['submit'])){
     $uname = mysqli_real_escape_string($conn,$_POST['username']);
     $password = mysqli_real_escape_string($conn,$_POST['password']);
@@ -47,3 +47,4 @@ if(isset($_POST['submit'])){
         </form>
         <p>Don't have an account? <a href="index.php?page=signup" style="color:gray;">Sign up now.</a></p>
     </div>
+<?php template_footer();?>

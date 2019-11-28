@@ -1,6 +1,6 @@
 <?php 
 template_header_login('signup');
-template_footer();
+
 
 if(isset($_POST['submit'])){
     $uname=$_POST['username'];
@@ -43,4 +43,4 @@ if(isset($_POST['submit'])){
         </form>
         <p>Already have an account? <a href="index.php?page=login" style="color:gray;">Login now.</a></p>
     </div>
-       
+<?php template_footer();?>       
