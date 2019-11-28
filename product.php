@@ -36,7 +36,7 @@ if(isset($_POST['add'])){
         $result_add = mysqli_query($conn,$query_adduser);
     }
     
-    //Fin Cart ID for the user
+    //Find Cart ID for the user
     $query_getCartID = "SELECT idcart from carttouser where iduser='".$uid['iduser']."' ";
     $result = mysqli_query($conn, $query_getCartID);
     $cartid = mysqli_fetch_array($result);
@@ -44,7 +44,7 @@ if(isset($_POST['add'])){
     //Adding the product to the cart that belongs to the user, if product already in cart update the amount
     $add_product_query="INSERT INTO cartproducts (idcart, idproduct, amount, price)
                                 VALUES ('".$cartid['idcart']."', '".$_POST["idproduct"]."', '1', '".$product['price']."')
-                                ON DUPLICATE KEY UPDATE amount = amount + 1";
+                                ON DUPLICATE KEY UPDATE amount = amount + '".$_POST["amount"]."'";
     $result_add = mysqli_query($conn,$add_product_query);
 }
 ?>
@@ -54,6 +54,14 @@ if(isset($_POST['add'])){
     <form method="post">
         <h1><?php echo $product["name"]?></h1><br>
         <?php echo $product["price"]." :-"?><br>
+          <select name="amount">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="4">5</option>
+          </select>
+          <br><br>       
         <input type="submit" name="add" value="Add to cart"><br>
         <?php echo $product["description"]?><br>
         <input type="hidden" name="iduser" value="<?php echo $uid["iduser"]?>">
