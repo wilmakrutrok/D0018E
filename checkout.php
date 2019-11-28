@@ -19,11 +19,18 @@
     ON cartproducts.idproduct = products.idproduct
   WHERE carttouser.iduser = '".$uid['iduser']."'";
   $result_cart = $conn->query($query_cart);
+
+
+
+  
   if(isset($_POST['pay_button'])){  
- /*
+
+  //Create a new order. IDorder is incremented automatically 
+  //so each new order is unique
   $query_create_order = "INSERT INTO orders(iduser)
   VALUES('".$uid['iduser']."')";
   mysqli_query($conn, $query_create_order);
+  //Use the generated IDorder to update orderproducts
   $order_id = $conn->insert_id;
   //Lägg in orderid och resten av informationen
   $query_orderdetails = "INSERT INTO orderproducts(idorder, idproduct, price, amount)
