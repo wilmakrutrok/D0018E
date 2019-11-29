@@ -92,3 +92,32 @@ footer {
 	padding-left: 20px;
 	height: 50px;
 }
+.container{
+	padding: 1px;
+	height: 95%
+	width: 95%;
+}
+.cart {
+	width: 99%;
+	height: 99%;
+
+
+}
+
+.cart th {
+	text-align: left;
+	font-size: 30px;
+
+}
+
+.cart tr tbody {
+	border-spacing: 20%;
+	height: 20%;
+}
+.cart td {
+	text-align: left;
+}
+
+.cart_header {
+	font-size: 40px;
+}

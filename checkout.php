@@ -23,9 +23,11 @@
   if(isset($_POST['pay_button'])){  
   //Create a new order. IDorder is incremented automatically 
   //so each new order is unique
-  $query_create_order = "INSERT INTO orders(iduser)
-  VALUES('".$uid['iduser']."')";
-  mysqli_query($conn, $query_create_order);
+  $query_create_order = $conn->prepare("INSERT INTO orders(iduser)
+  VALUES(?)");
+  $query_create_order->bind_param('i',$uid['iduser']);
+  $query_create_order->execute();
+  //mysqli_query($conn, $query_create_order);
   //Use the generated IDorder to update orderproducts
   $order_id = $conn->insert_id;
   //Inserting products from cart to orders
@@ -42,14 +44,16 @@
   $stmt->bind_param('i', $order_id);
   $stmt->execute();
   //Emptying all the products in the cart
-  $delete_cart = "
+  $delete_cart = $conn->prepare("
   DELETE  cartproducts 
   FROM cartproducts 
   INNER JOIN carttouser 
   ON carttouser.idcart = cartproducts.idcart 
-  WHERE carttouser.iduser = '".$uid['iduser']."'";
-  mysqli_query($conn, $delete_cart);
+  WHERE carttouser.iduser = ?");
+  $delete_cart->bind_param('i',$uid['iduser']);
+  $delete_cart->execute();
   //Sends the user back to checkout page
+  
   header('Location: index.php?page=checkout');
 }
 ?>
@@ -58,14 +62,15 @@
 -->
 
   <div class="container">
-    <table>
+    <table class="cart">
       <th>
-     <tr>
-       <td><h4><i class="fa fa-shopping-cart"></i> Products: </h4></span></td>
-        <td><h4>Price: </h4></td>
-        <td><h4>Quantity: </h4></td>
-        <td><h4>Total: </h4></td>
+     <tr class="cart_header">
+       <td><i class="fa fa-shopping-cart"></i> Products:</td>
+        <td>Price:</td>
+        <td>Quantity:</td>
+        <td>Total: </td>
      </tr>
+     <tr><td class="line"><br></td></tr>
    </th>
     <tbody>
       <?php
@@ -82,10 +87,10 @@
         -->
         <td><?php echo $cart["amount"]?><button type="button">Change</button></td>
         <td class="total"><?php $total_product = $cart["price"] * $cart["amount"]; 
-              $total_price = $total_price + $total_product;
-              echo $total_product ?></td>
-        <?php } ?>
-        <!-----While-loop Ends------>
+          $total_price = $total_price + $total_product;
+          echo $total_product ?>
+        </td>
+        <?php } ?><!-----While-loop Ends------>
          </tr>
          <tr>
           <td class="total"><h4>Total Price:</h4> </td>
