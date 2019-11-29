@@ -71,15 +71,20 @@ main {
 }
 
 .product {
-	/*margin-top: 150px;*/
-	widht: 50%;
+	padding-top: 50px;
 	display: block;	
+	width: 500px;
+	margin: 0 auto;
 }
 
 .product img {
 	height: 200px;
 	float: left;
 	padding-right: 30px;
+}
+
+.review {
+	padding-left: 20px;
 }
 
 footer {
