@@ -45,7 +45,8 @@ if(isset($_POST['add'])){
         //Adding the product to the cart that belongs to the user, if product already in cart update the amount
         $add_product_query="INSERT INTO cartproducts (idcart, idproduct, amount, price)
                                     VALUES ('".$cartid['idcart']."', '".$_POST["idproduct"]."', '".$_POST["amount"]."', '".$product['price']."')
-                                    ON DUPLICATE KEY UPDATE amount = amount + '".$_POST["amount"]."'";
+                                    ON DUPLICATE KEY UPDATE amount = 
+                                    IF((amount + '".$_POST["amount"]."') <= '".$product['inventory']."', amount + '".$_POST["amount"]."', amount)";
         $result_add = mysqli_query($conn,$add_product_query);
     }else{
         echo "Not enough in inventory";
