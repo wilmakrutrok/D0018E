@@ -19,6 +19,11 @@
     
     function template_header($title){
         
+        if(isset($_POST['submit'])){
+            $_SESSION['loggedin'] = false;
+            header('Location: index.php');
+        }
+        
    echo '
     <!DOCTYPE html>
     	<head>
@@ -31,6 +36,7 @@
             		<li><a href="index.php?page=home">Home</a></li>
             		<li><a href="index.php?page=products">Products</a></li>
             		<li><a href="index.php?page=home" style="color: black;">The store</a></li>
+                    <li style="float: right"><a href="index.php?page=logout">Log out</a></li>
             		<li style="float: right"><a href="index.php?page=checkout">Checkout</a></li>
             	</ul>
             </header>
