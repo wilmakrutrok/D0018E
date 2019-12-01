@@ -11,7 +11,7 @@
   //Priset borde hämtas från cartproductstabellen men den är
   //null där så hämtar från products direkt för nu
   $query_cart = "
-  SELECT  products.idproduct, products.name, products.price, products.inventory, carttouser.idcart, cartproducts.amount
+  SELECT  products.description, products.image, products.idproduct, products.name, products.price, products.inventory, carttouser.idcart, cartproducts.amount
   FROM carttouser
   INNER JOIN cartproducts
     ON carttouser.idcart = cartproducts.idcart
@@ -19,8 +19,14 @@
     ON cartproducts.idproduct = products.idproduct
   WHERE carttouser.iduser = '".$uid['iduser']."'";
   $result_cart = $conn->query($query_cart);
+
+
+
+
+
   //Enters when pay button is pressed
   if(isset($_POST['pay_button'])){
+  $conn->autocommit(false);
   //Create a new order. IDorder is incremented automatically
   //so each new order is unique
   $query_create_order = $conn->prepare("INSERT INTO orders(iduser)
@@ -42,6 +48,7 @@
     ON cartproducts.idproduct = products.idproduct
   WHERE orders.idorder = ?");
   $stmt->bind_param('i', $order_id);
+
   $stmt->execute();
 
   //Change inventory
@@ -73,6 +80,8 @@
   WHERE carttouser.iduser = ?");
   $delete_cart->bind_param('i',$uid['iduser']);
   $delete_cart->execute();
+
+  $conn->commit();
   //Sends the user back to checkout page
 
   header('Location: index.php?page=checkout');
@@ -101,21 +110,24 @@ if(isset($_POST['remove'])){
         header('Location: index.php?page=checkout');
 }
 ?>
-<!--<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
--->
 
-  <div class="container">
-    <table class="cart">
-      <th>
-     <tr class="cart_header">
-       <td><i class="fa fa-shopping-cart"></i> Products:</td>
-        <td>Price:</td>
-        <td>Quantity:</td>
-        <td>Total: </td>
+
+  <div class="container_cart">
+    <div class="div_cart_content">
+      <div class="checkout_page">
+        <div class="checkout_page_center">
+      <h4>CHECKOUT</h4>
+    </div>
+    </div>
+    <table class="checkout_table">
+      <thead class="cart_header">
+     <tr>
+        <td class="cart_products">Item</td>
+        <td>Price</td>
+        <td>Quantity</td>
+        <td>Total</td>
      </tr>
-     <tr><td class="line"><br></td></tr>
-   </th>
+   </thead>
     <tbody>
       <?php
         //Everything from the cart is displayed in different cells a new row for every product.
@@ -124,41 +136,40 @@ if(isset($_POST['remove'])){
         while($cart = $result_cart->fetch_assoc()){
       ?>
       <tr>
-        <td><?php echo $cart["name"]?></td>
-        <td><?php echo $cart["price"];?></td>
-        <!--
-          Ändra button så att det är input och kan ändra kvantitet i sin kundkorg
-        -->
-        <td><?php echo $cart["amount"]?>
-        <form method="post" style="float:right">
-        	<select name="amount">
+        <td class="cart_image"><img class="cart_image2" src="<?php echo $cart["image"]?>"></td>
+        <td>
+            <?php echo $cart["price"]?>
+          </td>
+          <td>
+            <?php echo $cart["amount"]?>
+            <form method="post">
+          <select name="amount">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
-         	</select>
-         	<input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
-         	<input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
-         	<input type="hidden" name="inventory" value="<?php echo $cart["inventory"]?>">
-         	<input type="submit" name="change" value="Change">
+          </select>
+          <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
+          <input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
+          <input type="hidden" name="inventory" value="<?php echo $cart["inventory"]?>">
+          <input type="submit" name="change" value="Change">
          </form>
-         </td>
-        <td class="total"><?php $total_product = $cart["price"] * $cart["amount"];
+          </td>
+              <td class="total_row"><h4 class="total_h4"><?php $total_product = $cart["price"] * $cart["amount"];
               $total_price = $total_price + $total_product;
-              echo $total_product ?>
-            <form method="post" style="float: right">
-                <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
-             	<input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
-          		<input type="submit" name="remove" value="Remove">
-          	</form>
+              echo $total_product ?></h4>
         </td>
+        <td> <form method="post" style="float: right">
+                <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
+              <input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
+              <input type="submit" name="remove" value="Remove">
+            </form></td>
         <?php } ?>
         <!-----While-loop Ends------>
          </tr>
-         <tr>
-          <td class="total"><h4>Total Price:</h4> </td>
-          <td class = "total"><?php  echo $total_price ?></td>
+         <tr class="total">
+          <td class="total"><h4>Total Price: <?php  echo $total_price ?></h4> </td>
          </tr>
          <tr><td>
          <form method="post">
@@ -167,6 +178,7 @@ if(isset($_POST['remove'])){
     </tbody>
          <?php } $conn->close(); ?>
   </table>
-  </div>
+</div>
+</div>
   </div>
 <?php template_footer();?>

@@ -14,14 +14,22 @@ if(isset($_POST['submit'])){
         $row = mysqli_fetch_array($result);
         $count = $row['cntUser'];
         if($count > 0){
-            $sql_query = "select password from users where username='".$uname."'";
+            $sql_query = "select password, role from users where username='".$uname."'";
             $result = mysqli_query($conn,$sql_query);
             $row = mysqli_fetch_array($result);
             $hashed_pwd = $row['password'];
+            $user_role = $row['role'];
             if (password_verify($password, $hashed_pwd)){
                 $_SESSION['uname'] = $uname;
-                $_SESSION['loggedin'] = true;
-                header('Location: index.php?page=home');
+                if($row['role']=='user'){
+                    $_SESSION['loggedin'] = true;
+                    header('Location: index.php?page=home');
+                }
+                else if ($row['role']=='admin'){
+                    $_SESSION['admin']=true;
+                    $_SESSION['loggedin'] = true;
+                    header('Location: index.php?page=admin');
+                }
             }else{
                 echo "Invalid Password";
             }

@@ -1,18 +1,24 @@
 <?php 
     $servername = "localhost";
-    $user = "root";
-    $password = "";
+    $user = "andre";
+    $password = "password";
     
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
         }
     
-    $db_name = "d0018e";
+    $db_name = "test";
     $db = mysqli_select_db($conn, $db_name);     
 
     function logged_in(){
         if($_SESSION['loggedin'] != true){
+            header('Location: index.php');
+        }
+    }
+
+        function admin_verify(){
+        if($_SESSION['admin'] != true){
             header('Location: index.php');
         }
     }
@@ -29,16 +35,19 @@
     	<head>
     		<title>The store</title>
     		<link rel="stylesheet" href="style.css">
+            <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
     	</head>
         <body>
         	<header>
-            	<ul>
-            		<li><a href="index.php?page=home">Home</a></li>
+            <div class="nav_bar">
+            	<ul>            		
+                    <li><a href="index.php?page=home">Home</a></li>
             		<li><a href="index.php?page=products">Products</a></li>
-            		<li><a href="index.php?page=home" style="color: black;">The store</a></li>
-                    <li style="float: right"><a href="index.php?page=logout">Log out</a></li>
-            		<li style="float: right"><a href="index.php?page=checkout">Checkout</a></li>
+            	    <li class="header_center"><a href="index.php?page=home">The store</a></li>
+                    <li class="header_right"><a href="index.php?page=logout">Log out</a></li>
+            		<li class="header_right"><a class="header_right" href="index.php?page=checkout">Checkout</a></li>
             	</ul>
+            </div>
             </header>
             <main>
         ';
@@ -47,7 +56,10 @@
         echo ' 
             </main>
             <footer>
-        		<p>Contact information</p>
+                <ul>
+                    <li><p>Contact information</p></li>
+                    <li class="footer_admin"><a href="index.php?page=admin">Admin</a></li>
+                </ul>
         	</footer>
         </body>
     </html>
@@ -78,3 +90,5 @@
         ';
     }
 ?>
+
+
