@@ -1,16 +1,15 @@
 <?php
-  logged_in();
-  template_header('checkout');
-
-  //Hämtar först ut användarens id
-  $uname = $_SESSION['uname'];
-  $query_getuid= "select iduser from users where username='".$uname."'";
-  $result_uid = mysqli_query($conn, $query_getuid);
-  $uid = mysqli_fetch_array($result_uid);
-  //Här hämtar jag ut alla produkter som finns i kundkorgen.
-  //Priset borde hämtas från cartproductstabellen men den är
-  //null där så hämtar från products direkt för nu
-  $query_cart = "
+logged_in();
+template_header('checkout');
+//Hämtar först ut användarens id
+$uname = $_SESSION['uname'];
+$query_getuid= "select iduser from users where username='".$uname."'";
+$result_uid = mysqli_query($conn, $query_getuid);
+$uid = mysqli_fetch_array($result_uid);
+//Här hämtar jag ut alla produkter som finns i kundkorgen.
+//Priset borde hämtas från cartproductstabellen men den är
+//null där så hämtar från products direkt för nu
+$query_cart = "
   SELECT  products.description, products.image, products.idproduct, products.name, products.price, products.inventory, carttouser.idcart, cartproducts.amount
   FROM carttouser
   INNER JOIN cartproducts
@@ -18,26 +17,21 @@
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
   WHERE carttouser.iduser = '".$uid['iduser']."'";
-  $result_cart = $conn->query($query_cart);
-
-
-
-
-
-  //Enters when pay button is pressed
-  if(isset($_POST['pay_button'])){
-  $conn->autocommit(false);
-  //Create a new order. IDorder is incremented automatically
-  //so each new order is unique
-  $query_create_order = $conn->prepare("INSERT INTO orders(iduser)
+$result_cart = $conn->query($query_cart);
+//Enters when pay button is pressed
+if(isset($_POST['pay_button'])){
+    $conn->autocommit(false);
+    //Create a new order. IDorder is incremented automatically
+    //so each new order is unique
+    $query_create_order = $conn->prepare("INSERT INTO orders(iduser)
   VALUES(?)");
-  $query_create_order->bind_param('i',$uid['iduser']);
-  $query_create_order->execute();
-  //mysqli_query($conn, $query_create_order);
-  //Use the generated IDorder to update orderproducts
-  $order_id = $conn->insert_id;
-  //Inserting products from cart to orders
-  $stmt =$conn->prepare("INSERT INTO orderproducts
+    $query_create_order->bind_param('i',$uid['iduser']);
+    $query_create_order->execute();
+    //mysqli_query($conn, $query_create_order);
+    //Use the generated IDorder to update orderproducts
+    $order_id = $conn->insert_id;
+    //Inserting products from cart to orders
+    $stmt =$conn->prepare("INSERT INTO orderproducts
   SELECT orders.idorder, cartproducts.idproduct, cartproducts.amount, cartproducts.price
   FROM orders
   INNER JOIN carttouser
@@ -47,12 +41,10 @@
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
   WHERE orders.idorder = ?");
-  $stmt->bind_param('i', $order_id);
-
-  $stmt->execute();
-
-  //Change inventory
-  $query_products_in_cart = "
+    $stmt->bind_param('i', $order_id);
+    $stmt->execute();
+    //Change inventory
+    $query_products_in_cart = "
   SELECT  products.idproduct, cartproducts.amount
   FROM carttouser
   INNER JOIN cartproducts
@@ -60,34 +52,29 @@
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
   WHERE carttouser.iduser = '".$uid['iduser']."'";
-  $result_products_in_cart = $conn->query($query_products_in_cart);
-  if($result_products_in_cart->num_rows > 0){
-      while($cart = $result_products_in_cart->fetch_assoc()){
-          $change_inventory = "
+    $result_products_in_cart = $conn->query($query_products_in_cart);
+    if($result_products_in_cart->num_rows > 0){
+        while($cart = $result_products_in_cart->fetch_assoc()){
+            $change_inventory = "
               UPDATE products
               SET inventory = inventory - '".$cart['amount']."'
               WHERE idproduct = '".$cart["idproduct"]."'";
-          mysqli_query($conn, $change_inventory);
-      }
-  }
-
-  //Emptying all the products in the cart
-  $delete_cart = $conn->prepare("
+            mysqli_query($conn, $change_inventory);
+        }
+    }
+    //Emptying all the products in the cart
+    $delete_cart = $conn->prepare("
   DELETE  cartproducts
   FROM cartproducts
   INNER JOIN carttouser
   ON carttouser.idcart = cartproducts.idcart
   WHERE carttouser.iduser = ?");
-  $delete_cart->bind_param('i',$uid['iduser']);
-  $delete_cart->execute();
-
-  $conn->commit();
-  //Sends the user back to checkout page
-
-  header('Location: index.php?page=checkout');
-
+    $delete_cart->bind_param('i',$uid['iduser']);
+    $delete_cart->execute();
+    $conn->commit();
+    //Sends the user back to checkout page
+    header('Location: index.php?page=checkout');
 }
-
 if(isset($_POST['change'])){
     //Chech so enough in inventory
     if($_POST["amount"] <= $_POST['inventory']){
@@ -101,13 +88,12 @@ if(isset($_POST['change'])){
         echo "Not enough in inventory";
     }
 }
-
 if(isset($_POST['remove'])){
-        //Adding the product to the cart that belongs to the user, if product already in cart update the amount
-        $delete_product_query="DELETE FROM cartproducts
+    //Adding the product to the cart that belongs to the user, if product already in cart update the amount
+    $delete_product_query="DELETE FROM cartproducts
                             WHERE idcart = '".$_POST['idcart']."' AND idproduct = '".$_POST["idproduct"]."'";
-        $result_delete = mysqli_query($conn,$delete_product_query);
-        header('Location: index.php?page=checkout');
+    $result_delete = mysqli_query($conn,$delete_product_query);
+    header('Location: index.php?page=checkout');
 }
 ?>
 
@@ -136,7 +122,7 @@ if(isset($_POST['remove'])){
         while($cart = $result_cart->fetch_assoc()){
       ?>
       <tr>
-        <td class="cart_image"><img class="cart_image2" src="<?php echo $cart["image"]?>"></td>
+        <td class="cart_image"><img class="cart_image2" style="height: 70px" src="<?php echo $cart["image"]?>"></td>
         <td>
             <?php echo $cart["price"]?>
           </td>
