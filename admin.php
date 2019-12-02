@@ -29,6 +29,11 @@ if(isset($_POST["edit"])){
             WHERE idproduct = '".$_POST['idproduct']."'";
     $result = mysqli_query($conn, $stmt);
 }
+if(isset($_POST["delete"])){
+    $stmt = "DELETE FROM products
+            WHERE idproduct = '".$_POST['idproduct']."'";
+    $result = mysqli_query($conn, $stmt);
+}
 ?>
 <div class="container">
     <div class="div_cart_content">
@@ -84,7 +89,8 @@ if(isset($_POST["edit"])){
         	        	<?php echo $product["price"]." :-"?><br>
         	        	<input type="text" name="newinventory" placeholder="<?php echo $product["inventory"]." in stock"?>"><br>
         	        	<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>"><br>
-        	        	<input type="submit" value="Edit" name="edit">
+        	        	<input type="submit" value="Edit" name="edit"><br>
+        	        	<input type="submit" value="Delete product" name="delete">
     	        	</form>
     	        </li>
   			<?php 
