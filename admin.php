@@ -89,7 +89,7 @@ if(isset($_POST["delete"])){
 
 
 <div class="products" style="margin-bottom: 400px">
-<h1>Change inventory</h1>
+<h1>Edit product</h1>
 	<ul>
     <?php 
         
