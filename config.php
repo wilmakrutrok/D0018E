@@ -1,14 +1,14 @@
 <?php 
     $servername = "localhost";
-    $user = "andre";
-    $password = "password";
+    $user = "root";
+    $password = "";
     
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
         }
     
-    $db_name = "test";
+    $db_name = "d0018e";
     $db = mysqli_select_db($conn, $db_name);     
 
     function logged_in(){
@@ -16,8 +16,7 @@
             header('Location: index.php');
         }
     }
-
-        function admin_verify(){
+    function admin_verify(){
         if($_SESSION['admin'] != true){
             header('Location: index.php');
         }
@@ -30,7 +29,7 @@
             header('Location: index.php');
         }
         
-   echo '
+        echo '
     <!DOCTYPE html>
     	<head>
     		<title>The store</title>
@@ -40,12 +39,13 @@
         <body>
         	<header>
             <div class="nav_bar">
-            	<ul>            		
+            	<ul>
                     <li><a href="index.php?page=home">Home</a></li>
             		<li><a href="index.php?page=products">Products</a></li>
             	    <li class="header_center"><a href="index.php?page=home">The store</a></li>
                     <li class="header_right"><a href="index.php?page=logout">Log out</a></li>
             		<li class="header_right"><a class="header_right" href="index.php?page=checkout">Checkout</a></li>
+                    <li class="header_right"><a class="header_right" href="index.php?page=user">User</a></li>
             	</ul>
             </div>
             </header>
@@ -53,7 +53,7 @@
         ';
     }
     function template_footer(){
-        echo ' 
+        echo '
             </main>
             <footer>
                 <ul>
@@ -89,6 +89,5 @@
             </div>
         ';
     }
-?>
-
-
+    ?>
+    
