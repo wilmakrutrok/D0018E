@@ -103,9 +103,7 @@ if(isset($_POST["delete"])){
                 <li>
                 	<form method="post">
         	        	<img src="<?php echo $product["image"]?>"><br>
-        	        	<?php echo $product["name"]?><br>
         	        	<input type="text" name="newname" placeholder="<?php echo $product["name"]?>"><br>
-        	        	<?php echo $product["price"]." :-"?><br>
         	        	<input type="text" name="newprice" placeholder="<?php echo $product["price"]." :-"?>"><br>
         	        	<input type="text" name="newinventory" placeholder="<?php echo $product["inventory"]." in stock"?>"><br>
         	        	<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>"><br>
