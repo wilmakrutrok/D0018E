@@ -52,6 +52,12 @@ if(isset($_POST["delete"])){
             WHERE idproduct = '".$_POST['idproduct']."'";
     $result = mysqli_query($conn, $stmt);
 }
+
+if(isset($_POST["delete_review"])){
+    $delete_review = "DELETE FROM review
+            WHERE idreview = '".$_POST['idreview']."'";
+    $review_deleted = mysqli_query($conn, $delete_review);
+}
 ?>
 <div class="container">
     <div class="div_cart_content">
@@ -113,10 +119,38 @@ if(isset($_POST["delete"])){
     	        </li>
   			<?php 
     	    }
-    	    $conn->close();
+
     	}
         ?>
         </ul>
     </div> 
+    
+ <div class="review" style="margin-bottom: 200px">
+	<h2>Reviews</h2>
+	<ul>
+    <?php 
+        $query_reviews = "SELECT * FROM review";
+    	$result_reviews = $conn->query($query_reviews);
+    	
+    	if ($result_reviews->num_rows > 0) {
+
+    	    while($review = $result_reviews->fetch_assoc()) {
+                ?>
+                <li>
+    	        	Rate: <?php echo $review["grade"]?><br>
+    	        	Comment: <?php echo $review["comment"]?><br>
+    	        	<form method="post">
+    	        	<input type="hidden" value="<?php echo $review["idreview"]?>" name="idreview">
+    	        	<input type="submit" value="Delete" name="delete_review">
+    	        	</form>
+    	        </li>
+  			<?php 
+    	    }
+
+    	}
+        ?>
+        </ul>
+        
+</div>
       </div>
 <?php template_footer();?>

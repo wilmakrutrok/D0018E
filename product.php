@@ -69,18 +69,6 @@ if (isset($_POST["send_review"])) {
 	<img src="<?php echo $product["image"]?>">
     <form method="post">
         <h1><?php echo $product["name"]?></h1>
-        <!-- <div class="rate">
-            <input type="radio" id="five_star" name="rate" value="5">
-            <label for="star5">★</label>
-            <input type="radio" id="four_star" name="rate" value="4">
-            <label for="star4">★</label>
-            <input type="radio" id="three_star" name="rate" value="3">
-            <label for="star3">★</label>
-            <input type="radio" id="two_star" name="rate" value="2">
-            <label for="star2">★</label>
-            <input type="radio" id="one_star" name="rate" value="1">
-            <label for="star1">★</label>
- 		</div> <br><br><br>-->
 
         <?php echo $product["price"]." :-"?><br>
           <select name="amount">
@@ -113,7 +101,6 @@ if (isset($_POST["send_review"])) {
     	    while($review = $result_reviews->fetch_assoc()) {
                 ?>
                 <li>
-                    Name: <?php echo $uname?><br>
     	        	Rate: <?php echo $review["grade"]?><br>
     	        	Comment: <?php echo $review["comment"]?>
     	        </li>
@@ -123,6 +110,7 @@ if (isset($_POST["send_review"])) {
     	}
         ?>
         </ul>
+        <br><br><br>
     <h3>Leave a review</h3>
     	<form method="post">
     	<div class="rate">
