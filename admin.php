@@ -23,12 +23,30 @@
         $stmt->execute();
         header('Location: index.php?page=admin');
 }
-if(isset($_POST["edit"])){
-    $stmt = "UPDATE products
+if(isset($_POST["edit"]) && $_POST["newinventory"] != ""){
+    $stmt = "
+            UPDATE products
             SET inventory = '".$_POST['newinventory']."'
             WHERE idproduct = '".$_POST['idproduct']."'";
     $result = mysqli_query($conn, $stmt);
 }
+
+if(isset($_POST["edit"]) && $_POST["newname"] != ""){
+    $stmt = "
+            UPDATE products
+            SET name = '".$_POST['newname']."'
+            WHERE idproduct = '".$_POST['idproduct']."'";
+    $result = mysqli_query($conn, $stmt);
+}
+
+if(isset($_POST["edit"]) && $_POST["newprice"] != ""){
+    $stmt = "
+            UPDATE products
+            SET price = '".$_POST['newprice']."'
+            WHERE idproduct = '".$_POST['idproduct']."'";
+    $result = mysqli_query($conn, $stmt);
+}
+
 if(isset($_POST["delete"])){
     $stmt = "DELETE FROM products
             WHERE idproduct = '".$_POST['idproduct']."'";
@@ -86,10 +104,12 @@ if(isset($_POST["delete"])){
                 	<form method="post">
         	        	<img src="<?php echo $product["image"]?>"><br>
         	        	<?php echo $product["name"]?><br>
+        	        	<input type="text" name="newname" placeholder="<?php echo $product["name"]?>"><br>
         	        	<?php echo $product["price"]." :-"?><br>
+        	        	<input type="text" name="newprice" placeholder="<?php echo $product["price"]." :-"?>"><br>
         	        	<input type="text" name="newinventory" placeholder="<?php echo $product["inventory"]." in stock"?>"><br>
         	        	<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>"><br>
-        	        	<input type="submit" value="Edit" name="edit"><br>
+        	        	<input type="submit" value="Edit" name="edit">
         	        	<input type="submit" value="Delete product" name="delete">
     	        	</form>
     	        </li>
