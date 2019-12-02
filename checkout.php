@@ -1,11 +1,13 @@
 <?php
 logged_in();
 template_header('checkout');
+
 //Hämtar först ut användarens id
 $uname = $_SESSION['uname'];
 $query_getuid= "select iduser from users where username='".$uname."'";
 $result_uid = mysqli_query($conn, $query_getuid);
 $uid = mysqli_fetch_array($result_uid);
+
 //Här hämtar jag ut alla produkter som finns i kundkorgen.
 //Priset borde hämtas från cartproductstabellen men den är
 //null där så hämtar från products direkt för nu
@@ -23,11 +25,12 @@ if(isset($_POST['pay_button'])){
     $conn->autocommit(false);
     //Create a new order. IDorder is incremented automatically
     //so each new order is unique
-    $query_create_order = $conn->prepare("INSERT INTO orders(iduser)
-  VALUES(?)");
-    $query_create_order->bind_param('i',$uid['iduser']);
+    $todaysdate = date("Y-m-d");
+    $query_create_order = $conn->prepare("INSERT INTO orders(iduser, totalprice, date)
+                                        VALUES(?, ?, ?)");
+    $query_create_order->bind_param('ids',$uid['iduser'], $_POST['totalprice'], $todaysdate);
     $query_create_order->execute();
-    //mysqli_query($conn, $query_create_order);
+    
     //Use the generated IDorder to update orderproducts
     $order_id = $conn->insert_id;
     //Inserting products from cart to orders
@@ -43,6 +46,7 @@ if(isset($_POST['pay_button'])){
   WHERE orders.idorder = ?");
     $stmt->bind_param('i', $order_id);
     $stmt->execute();
+    
     //Change inventory
     $query_products_in_cart = "
   SELECT  products.idproduct, cartproducts.amount
@@ -98,7 +102,7 @@ if(isset($_POST['remove'])){
 ?>
 
 
-  <div class="container_cart">
+  <div class="container_cart" style="margin-bottom:200px">
     <div class="div_cart_content">
       <div class="checkout_page">
         <div class="checkout_page_center">
@@ -159,6 +163,7 @@ if(isset($_POST['remove'])){
          </tr>
          <tr><td>
          <form method="post">
+          <input type="hidden" name="totalprice" value="<?php echo $total_price?>">
           <input type="submit" name="pay_button" value="Pay"></button></form></td>
          </tr>
     </tbody>
