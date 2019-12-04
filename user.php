@@ -1,9 +1,10 @@
 <?php
   logged_in();
   template_header('user');
+  $uname = $_SESSION['uname'];
 ?>
 <br>
-<h1>Orders:</h1>
+<h1>Orders for <?php echo $uname?>:</h1>
 <table>
 <thead>
 <tr>
@@ -14,7 +15,7 @@
 </thead>
 <tbody>
 <?php 
-        $uname = $_SESSION['uname'];
+        
         $iduser = $_SESSION['iduser'];
         
         //find user ID
@@ -33,7 +34,7 @@
     	        
                 ?><tr>
                 	<td><?php echo $order["date"]?></td>
-    	        	<td><?php echo $order["totalprice"]?></td>
+    	        	<td><?php echo $order["totalprice"]." :-"?></td>
     	        	<td><table><tr>
                     	<td>Product:</td>
                         <td>Amount:</td>
@@ -52,7 +53,7 @@
     	                    ?><tr>
     	                    <td><?php echo $orderproduct["name"]?></td>
     	                    <td><?php echo $orderproduct["amount"]?></td>
-    	                    <td><?php echo $orderproduct["price"]?></td>
+    	                    <td><?php echo $orderproduct["price"]." :-"?></td>
     	                    <?php 
     	                }}
     	            ?>
