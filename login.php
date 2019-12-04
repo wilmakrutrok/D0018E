@@ -1,6 +1,5 @@
 <?php
 template_header_login('login');
-
 if(isset($_POST['submit'])){
     $uname = mysqli_real_escape_string($conn,$_POST['username']);
     $password = mysqli_real_escape_string($conn,$_POST['password']);
@@ -20,6 +19,13 @@ if(isset($_POST['submit'])){
             $hashed_pwd = $row['password'];
             $user_role = $row['role'];
             if (password_verify($password, $hashed_pwd)){
+                //Get user id
+                $query_getUid = "select iduser from users where username='".$uname."'";
+                $result_getUid = mysqli_query($conn,$query_getUid);
+                $uid = mysqli_fetch_array($result_getUid);
+                $iduser = $uid['iduser'];
+                $_SESSION['iduser'] = $iduser;
+                
                 $_SESSION['uname'] = $uname;
                 if($row['role']=='user'){
                     $_SESSION['loggedin'] = true;
@@ -41,7 +47,7 @@ if(isset($_POST['submit'])){
         echo "No username or password given";
     }
 }
-       
+
 ?>
 
     <div class="login">

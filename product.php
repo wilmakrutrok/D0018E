@@ -19,26 +19,29 @@ if (isset($_GET['id'])) {
 $uname = $_SESSION['uname'];
 
 //find user ID
-$query_getuid= "select iduser from users where username='".$uname."'";
+/*$query_getuid= "select iduser from users where username='".$uname."'";
 $result_uid = mysqli_query($conn, $query_getuid);
-$uid = mysqli_fetch_array($result_uid);
+$uid = mysqli_fetch_array($result_uid);*/
+
+//Get user ID
+$iduser = $_SESSION['iduser'];
 
 if(isset($_POST['add'])){
     //Chech so enough in inventory
     if($_POST["amount"] <= $product['inventory']){
         //Search if user has a cart. If no is found one is created.
-        $count_query = "select count(*) as cntUser from carttouser where iduser='".$uid['iduser']."'";
+        $count_query = "select count(*) as cntUser from carttouser where iduser='".$iduser."'";
         $result = mysqli_query($conn, $count_query);
         $row = mysqli_fetch_array($result);
         $count = $row['cntUser'];
         
         if($count == 0){
-            $query_adduser = "INSERT INTO carttouser (iduser) VALUES ('".$uid['iduser']."')";
+            $query_adduser = "INSERT INTO carttouser (iduser) VALUES ('".$iduser."')";
             $result_add = mysqli_query($conn,$query_adduser);
         }
         
         //Find Cart ID for the user
-        $query_getCartID = "SELECT idcart from carttouser where iduser='".$uid['iduser']."' ";
+        $query_getCartID = "SELECT idcart from carttouser where iduser='".$iduser."' ";
         $result = mysqli_query($conn, $query_getCartID);
         $cartid = mysqli_fetch_array($result);
         
@@ -82,7 +85,7 @@ if (isset($_POST["send_review"])) {
           <br><br>       
         <input type="submit" name="add" value="Add to cart"><br>
         <?php echo $product["description"]?><br>
-        <input type="hidden" name="iduser" value="<?php echo $uid["iduser"]?>">
+        
     	<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>">
     	<input type="hidden" name="price" value="<?php echo $product["price"]?>">
     </form>

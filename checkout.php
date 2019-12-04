@@ -4,9 +4,11 @@ template_header('checkout');
 
 //Hämtar först ut användarens id
 $uname = $_SESSION['uname'];
-$query_getuid= "select iduser from users where username='".$uname."'";
+$iduser = $_SESSION['iduser'];
+
+/*$query_getuid= "select iduser from users where username='".$uname."'";
 $result_uid = mysqli_query($conn, $query_getuid);
-$uid = mysqli_fetch_array($result_uid);
+$uid = mysqli_fetch_array($result_uid);*/
 
 //Här hämtar jag ut alla produkter som finns i kundkorgen.
 //Priset borde hämtas från cartproductstabellen men den är
@@ -18,7 +20,7 @@ $query_cart = "
     ON carttouser.idcart = cartproducts.idcart
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
-  WHERE carttouser.iduser = '".$uid['iduser']."'";
+  WHERE carttouser.iduser = '".$iduser."'";
 $result_cart = $conn->query($query_cart);
 //Enters when pay button is pressed
 if(isset($_POST['pay_button'])){
@@ -28,7 +30,7 @@ if(isset($_POST['pay_button'])){
     $todaysdate = date("Y-m-d");
     $query_create_order = $conn->prepare("INSERT INTO orders(iduser, totalprice, date)
                                         VALUES(?, ?, ?)");
-    $query_create_order->bind_param('ids',$uid['iduser'], $_POST['totalprice'], $todaysdate);
+    $query_create_order->bind_param('ids',$iduser, $_POST['totalprice'], $todaysdate);
     $query_create_order->execute();
     
     //Use the generated IDorder to update orderproducts
@@ -55,7 +57,7 @@ if(isset($_POST['pay_button'])){
     ON carttouser.idcart = cartproducts.idcart
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
-  WHERE carttouser.iduser = '".$uid['iduser']."'";
+  WHERE carttouser.iduser = '".$iduser."'";
     $result_products_in_cart = $conn->query($query_products_in_cart);
     if($result_products_in_cart->num_rows > 0){
         while($cart = $result_products_in_cart->fetch_assoc()){
@@ -73,7 +75,7 @@ if(isset($_POST['pay_button'])){
   INNER JOIN carttouser
   ON carttouser.idcart = cartproducts.idcart
   WHERE carttouser.iduser = ?");
-    $delete_cart->bind_param('i',$uid['iduser']);
+    $delete_cart->bind_param('i',$iduser);
     $delete_cart->execute();
     $conn->commit();
     //Sends the user back to checkout page

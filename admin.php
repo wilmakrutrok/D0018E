@@ -59,98 +59,98 @@ if(isset($_POST["delete_review"])){
     $review_deleted = mysqli_query($conn, $delete_review);
 }
 ?>
-<div class="container">
+<div class="container" style="margin-bottom: 600px">
     <div class="div_cart_content">
-      <div class="checkout_page">
-        <div class="checkout_page_center">
-      <h4>INSERT NEW PRODUCT</h4>
-    </div>
-    </div>
-  <table class="admin_table">
-    <form action="" method="post" enctype="multipart/form-data">
-    <th>
-      <tr>
-        <td class="admin_add_image"><h4>Upload Picture</h4></td>
-        <td><h4>Product Name</h4></td>
-        <td><h4>Set price</h4></td>
-        <td><h4>Set inventory</h4></td>
-        <td><h4>Description</h4></td>
-      </tr>
-    </th>
-    <tbody>
-      <tr>
-        <td><input type="file" name="image"></td>
-        <td><input type="text" name="name"></td>
-        <td><input type="text" name="price"></td>
-        <td><input type="text" name="inventory"></td>
-        <td><input type="text" name="description"></td>
-      </tr>
-      <tr>
-        <td> <input type="submit" value="Upload Product:" name="submit"></td>
-      </tr>
-    </tbody>
-     </form>
-  </table>
-</div>
+    	<div class="checkout_page">
+        	<div class="checkout_page_center">
+     			<h4>INSERT NEW PRODUCT</h4>
+    		</div>
+    	</div>
+          <table class="admin_table">
+            <form action="" method="post" enctype="multipart/form-data">
+            <th>
+              <tr>
+                <td class="admin_add_image"><h4>Upload Picture</h4></td>
+                <td><h4>Product Name</h4></td>
+                <td><h4>Set price</h4></td>
+                <td><h4>Set inventory</h4></td>
+                <td><h4>Description</h4></td>
+              </tr>
+            </th>
+            <tbody>
+              <tr>
+                <td><input type="file" name="image"></td>
+                <td><input type="text" name="name"></td>
+                <td><input type="text" name="price"></td>
+                <td><input type="text" name="inventory"></td>
+                <td><input type="text" name="description"></td>
+              </tr>
+              <tr>
+                <td> <input type="submit" value="Upload Product:" name="submit"></td>
+              </tr>
+            </tbody>
+             </form>
+          </table>
+	</div>
 
 
-<div class="products" style="margin-bottom: 400px">
-<h1>Edit product</h1>
-	<ul>
-    <?php 
-        
-    	$query_producttable = "SELECT name, description, price, inventory, idproduct, image FROM products";
-    	$result_producttable = $conn->query($query_producttable);
-    	
-    	if ($result_producttable->num_rows > 0) {
-
-    	    while($product = $result_producttable->fetch_assoc()) {
-                ?>
-                <li>
-                	<form method="post">
-        	        	<img src="<?php echo $product["image"]?>"><br>
-        	        	<input type="text" name="newname" placeholder="<?php echo $product["name"]?>"><br>
-        	        	<input type="text" name="newprice" placeholder="<?php echo $product["price"]." :-"?>"><br>
-        	        	<input type="text" name="newinventory" placeholder="<?php echo $product["inventory"]." in stock"?>"><br>
-        	        	<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>"><br>
-        	        	<input type="submit" value="Edit" name="edit">
-        	        	<input type="submit" value="Delete product" name="delete">
-    	        	</form>
-    	        </li>
-  			<?php 
-    	    }
-
-    	}
-        ?>
-        </ul>
+    <div class="products">
+    <h1>Edit product</h1>
+    	<ul>
+        <?php 
+            
+        	$query_producttable = "SELECT name, description, price, inventory, idproduct, image FROM products";
+        	$result_producttable = $conn->query($query_producttable);
+        	
+        	if ($result_producttable->num_rows > 0) {
+    
+        	    while($product = $result_producttable->fetch_assoc()) {
+                    ?>
+                    <li>
+                    	<form method="post">
+            	        	<img src="<?php echo $product["image"]?>"><br>
+            	        	<input type="text" name="newname" placeholder="<?php echo $product["name"]?>"><br>
+            	        	<input type="text" name="newprice" placeholder="<?php echo $product["price"]." :-"?>"><br>
+            	        	<input type="text" name="newinventory" placeholder="<?php echo $product["inventory"]." in stock"?>"><br>
+            	        	<input type="hidden" name="idproduct" value="<?php echo $product["idproduct"]?>"><br>
+            	        	<input type="submit" value="Edit" name="edit">
+            	        	<input type="submit" value="Delete product" name="delete">
+        	        	</form>
+        	        </li>
+      			<?php 
+        	    }
+    
+        	}
+            ?>
+            </ul>
     </div> 
     
- <div class="review" style="margin-bottom: 200px">
-	<h2>Reviews</h2>
-	<ul>
-    <?php 
-        $query_reviews = "SELECT * FROM review";
-    	$result_reviews = $conn->query($query_reviews);
-    	
-    	if ($result_reviews->num_rows > 0) {
-
-    	    while($review = $result_reviews->fetch_assoc()) {
-                ?>
-                <li>
-    	        	Rate: <?php echo $review["grade"]?><br>
-    	        	Comment: <?php echo $review["comment"]?><br>
-    	        	<form method="post">
-    	        	<input type="hidden" value="<?php echo $review["idreview"]?>" name="idreview">
-    	        	<input type="submit" value="Delete" name="delete_review">
-    	        	</form>
-    	        </li>
-  			<?php 
-    	    }
-
-    	}
-        ?>
-        </ul>
-        
+     <div class="review" style="margin-top: 300px">
+    	<h2>Reviews</h2>
+    	<ul>
+        <?php 
+            $query_reviews = "SELECT * FROM review";
+        	$result_reviews = $conn->query($query_reviews);
+        	
+        	if ($result_reviews->num_rows > 0) {
+    
+        	    while($review = $result_reviews->fetch_assoc()) {
+                    ?>
+                    <li>
+        	        	Rate: <?php echo $review["grade"]?><br>
+        	        	Comment: <?php echo $review["comment"]?><br>
+        	        	<form method="post">
+        	        	<input type="hidden" value="<?php echo $review["idreview"]?>" name="idreview">
+        	        	<input type="submit" value="Delete" name="delete_review">
+        	        	</form>
+        	        </li>
+      			<?php 
+        	    }
+    
+        	}
+            ?>
+            </ul>
+            
+    </div>
 </div>
-      </div>
 <?php template_footer();?>

@@ -15,13 +15,14 @@
 <tbody>
 <?php 
         $uname = $_SESSION['uname'];
+        $iduser = $_SESSION['iduser'];
         
         //find user ID
-        $query_getuid= "select iduser from users where username='".$uname."'";
+        /*$query_getuid= "select iduser from users where username='".$uname."'";
         $result_uid = mysqli_query($conn, $query_getuid);
-        $uid = mysqli_fetch_array($result_uid);
+        $uid = mysqli_fetch_array($result_uid);*/
 
-    	$query_orders = "SELECT idorder, totalprice, date FROM orders WHERE iduser = '".$uid['iduser']."'";
+    	$query_orders = "SELECT idorder, totalprice, date FROM orders WHERE iduser = '".$iduser."'";
     	$result_orders = $conn->query($query_orders);
     	
     	if ($result_orders->num_rows > 0) {
