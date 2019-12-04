@@ -79,8 +79,10 @@
             	<ul>
             		<li><a>Home</a></li>
             		<li><a>Products</a></li>
-            		<li><a style="color: black;">The store</a></li>
-            		<li style="float: right"><a>Checkout</a></li>
+            		<li class="header_center"><a>The store</a></li>
+            		<li class="header_right"><a>Log out</a></li>
+            		<li class="header_right"><a class="header_right">Checkout</a></li>
+                    <li class="header_right"><a class="header_right">User</a></li>
             	</ul>
             </header>
             <main>
