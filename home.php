@@ -9,10 +9,15 @@ if(isset($_POST['submit'])){
 }
 
 
+
+
+
+
+ if(isset($_POST['search'])){
+
 $search_value=$_POST["search"];
 $the_product =  "Select * from products where name = '".$search_value."'";
 $result = $conn->query($the_product);
- if(isset($_POST['search'])){
     	if ($result->num_rows > 0) {
 
     	    while($product = $result->fetch_assoc()) {
@@ -27,6 +32,7 @@ else{
 die ('Product does not exist');
 }
 }
+
 
 
 ?>
