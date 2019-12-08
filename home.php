@@ -1,7 +1,6 @@
 <?php
 logged_in();
 template_header('home');
-template_footer();
 
 if(isset($_POST['submit'])){
     $_SESSION['loggedin'] = false;
@@ -45,3 +44,4 @@ else{
          <input type="submit" value="Log out" name="submit">
     </form>
 </div>
+<?php template_footer(); ?>
