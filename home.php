@@ -2,17 +2,7 @@
 logged_in();
 template_header('home');
 
-if(isset($_POST['submit'])){
-    $_SESSION['loggedin'] = false;
-    header('Location: index.php');
-}
-
-
-
-
-
-
- if(isset($_POST['search'])){
+if(isset($_POST['search'])){
 
 $search_value=$_POST["search"];
 $the_product = $conn->prepare("SELECT * from products where name = ?");
@@ -39,9 +29,5 @@ else{
 	<p style="margin-top: -120px; color: black"><form action="" method="post">
 <input type="text" name="search">
 <input type="submit" name="submit2" value="Search">
-</form></p>
-	<form style="margin-top: -290px" method="post">
-         <input type="submit" value="Log out" name="submit">
-    </form>
 </div>
 <?php template_footer(); ?>
