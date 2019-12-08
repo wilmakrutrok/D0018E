@@ -110,66 +110,74 @@ if(isset($_POST['remove'])){
       <h4>CHECKOUT</h4>
     </div>
     </div>
-    <table class="checkout_table">
-      <thead class="cart_header">
-     <tr>
-        <td class="cart_products">Item</td>
-        <td>Price</td>
-        <td>Quantity</td>
-        <td>Total</td>
-     </tr>
-   </thead>
-    <tbody>
-      <?php
+    <!-- If the user has items in the cart then they are displayed-->
+    <?php
+    if($result_cart->num_rows > 0){ ?>
+      <table class="checkout_table">
+        <thead class="cart_header">
+       <tr>
+          <td class="cart_products">Item</td>
+          <td>Price</td>
+          <td>Quantity</td>
+          <td>Total</td>
+       </tr>
+     </thead>
+      <tbody>
+        <?php
         //Everything from the cart is displayed in different cells a new row for every product.
-      if($result_cart->num_rows > 0){
-        $total_price = 0;
-        while($cart = $result_cart->fetch_assoc()){
-      ?>
-      <tr>
-        <td class="cart_image"><img class="cart_image2" style="height: 70px" src="<?php echo $cart["image"]?>"></td>
-        <td>
-            <?php echo $cart["price"]?>
-          </td>
+        //if($result_cart->num_rows > 0){
+          $total_price = 0;
+          while($cart = $result_cart->fetch_assoc()){
+        ?>
+        <tr>
+          <td class="cart_image"><img class="cart_image2" style="height: 70px" src="<?php echo $cart["image"]?>"></td>
           <td>
-            <?php echo $cart["amount"]?>
-            <form method="post">
-          <select name="amount">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-          </select>
-          <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
-          <input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
-          <input type="hidden" name="inventory" value="<?php echo $cart["inventory"]?>">
-          <input type="submit" name="change" value="Change">
-         </form>
+              <?php echo $cart["price"]?>
+            </td>
+            <td>
+              <?php echo $cart["amount"]?>
+              <form method="post">
+            <select name="amount">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+            </select>
+            <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
+            <input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
+            <input type="hidden" name="inventory" value="<?php echo $cart["inventory"]?>">
+            <input type="submit" name="change" value="Change">
+           </form>
+            </td>
+                <td class="total_row"><h4 class="total_h4"><?php $total_product = $cart["price"] * $cart["amount"];
+                $total_price = $total_price + $total_product;
+                echo $total_product ?></h4>
           </td>
-              <td class="total_row"><h4 class="total_h4"><?php $total_product = $cart["price"] * $cart["amount"];
-              $total_price = $total_price + $total_product;
-              echo $total_product ?></h4>
-        </td>
-        <td> <form method="post" style="float: right">
-                <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
-              <input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
-              <input type="submit" name="remove" value="Remove">
-            </form></td>
-        <?php } ?>
-        <!-----While-loop Ends------>
-         </tr>
-         <tr class="total">
-          <td class="total"><h4>Total Price: <?php  echo $total_price ?></h4> </td>
-         </tr>
-         <tr><td>
-         <form method="post">
-          <input type="hidden" name="totalprice" value="<?php echo $total_price?>">
-          <input type="submit" name="pay_button" value="Pay"></button></form></td>
-         </tr>
-    </tbody>
-         <?php } $conn->close(); ?>
-  </table>
+          <td> <form method="post" style="float: right">
+                  <input type="hidden" name="idcart" value="<?php echo $cart["idcart"]?>">
+                <input type="hidden" name="idproduct" value="<?php echo $cart["idproduct"]?>">
+                <input type="submit" name="remove" value="Remove">
+              </form></td>
+          <?php } ?>
+          <!-----Stops printing out items in cart------>
+           </tr>
+           <tr class="total">
+            <td class="total"><h4>Total Price: <?php  echo $total_price ?></h4> </td>
+           </tr>
+           <tr><td>
+           <form method="post">
+            <input type="hidden" name="totalprice" value="<?php echo $total_price?>">
+            <input type="submit" name="pay_button" value="Pay"></button></form></td>
+           </tr>
+      </tbody>
+           
+    </table>
+    <?php $conn->close(); }
+  //If user has no items in cart this text is displayed
+  else{ ?> <h4>You have no items in your cart</h4> 
+  <?php 
+  } ?>
 </div>
 </div>
   </div>
