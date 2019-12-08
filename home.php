@@ -26,7 +26,8 @@ if ($result->num_rows > 0) {
   }
 }
 else{
-  die ('Product does not exist');
+  //die ('Product does not exist');
+  header('Location:index.php?page=home');
 }
 }
 
