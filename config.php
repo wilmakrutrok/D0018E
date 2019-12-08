@@ -1,14 +1,14 @@
 <?php 
     $servername = "localhost";
     $user = "root";
-    $password = "";
+    $password = "password";
     
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
         }
-    
-    $db_name = "d0018e";
+
+    $db_name = "test";
     $db = mysqli_select_db($conn, $db_name);     
 
     function logged_in(){

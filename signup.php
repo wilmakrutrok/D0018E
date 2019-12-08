@@ -9,9 +9,11 @@ if(isset($_POST['submit'])){
     if ($password != $password2){
         echo"Password does not match";
     }elseif ($uname != "" && $password != "") {
-          $sql_query = "select count(*) as cntUser
-          from users where username='".$uname."'";
-          $result = mysqli_query($conn,$sql_query);
+          $sql_query = $conn -> prepare("select count(*) as cntUser
+          from users where username= ?");
+          $sql_query -> bind_param('s', $uname);
+          $sql_query -> execute();
+          $result = $sql_query -> get_result();
           $row = mysqli_fetch_array($result);
           $count = $row['cntUser'];
           if($count > 0){
@@ -19,9 +21,11 @@ if(isset($_POST['submit'])){
           }
           else{
             $hash=password_hash("$password", PASSWORD_DEFAULT);
-            $sql_query2="INSERT INTO users (username, password)
-                        VALUES ('".$uname."', '".$hash."')";
-            $newuser_add = mysqli_query($conn,$sql_query2);
+            $sql_query2 = $conn -> prepare("INSERT INTO users (username, password)
+                        VALUES (?, ?)");
+            $sql_query2 -> bind_param('ss', $uname, $hash);
+            $sql_query2 -> execute();
+            //$newuser_add = mysqli_query($conn,$sql_query2);
             header('Location: index.php?page=home');
           }
     }else {

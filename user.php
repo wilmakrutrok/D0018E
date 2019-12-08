@@ -23,8 +23,10 @@
         $result_uid = mysqli_query($conn, $query_getuid);
         $uid = mysqli_fetch_array($result_uid);*/
 
-    	$query_orders = "SELECT idorder, totalprice, date FROM orders WHERE iduser = '".$iduser."'";
-    	$result_orders = $conn->query($query_orders);
+    	$query_orders = $conn -> prepare("SELECT idorder, totalprice, date FROM orders WHERE iduser = ?");
+        $query_orders -> bind_param('i', $iduser);
+        $query_orders -> execute();
+    	$result_orders = $query_orders -> get_result();
     	
     	if ($result_orders->num_rows > 0) {
 
@@ -41,12 +43,14 @@
                         <td>Price:</td>
                     </tr>
     	        	<?php 
-    	        	$query_orderproducts = "SELECT products.name, orderproducts.amount, orderproducts.price 
+    	        	$query_orderproducts = $conn -> prepare("SELECT products.name, orderproducts.amount, orderproducts.price 
                                         FROM orderproducts 
                                         INNER JOIN products
                                         ON orderproducts.idproduct = products.idproduct
-                                        WHERE idorder = '".$order['idorder']."'";
-    	            $result_orderproducts = $conn->query($query_orderproducts);
+                                        WHERE idorder = ?");
+                    $query_orderproducts -> bind_param('i', $order['idorder']);
+                    $query_orderproducts -> execute();
+    	            $result_orderproducts = $query_orderproducts -> get_result();
     	            if ($result_orderproducts->num_rows > 0) {
     	                
     	                while($orderproduct = $result_orderproducts->fetch_assoc()) {

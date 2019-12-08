@@ -16,20 +16,17 @@ if(isset($_POST['submit'])){
  if(isset($_POST['search'])){
 
 $search_value=$_POST["search"];
-$the_product =  "Select * from products where name = '".$search_value."'";
-$result = $conn->query($the_product);
-    	if ($result->num_rows > 0) {
-
-    	    while($product = $result->fetch_assoc()) {
-	
-		header('Location:index.php?page=product&id='.$product["idproduct"]);
-  		 
-                
-    	    }
+$the_product = $conn->prepare("SELECT * from products where name = ?");
+$the_product->bind_param('s', $search_value);
+$the_product->execute();
+$result = $the_product->get_result();
+if ($result->num_rows > 0) {
+  while($product = $result->fetch_assoc()){
+		 header('Location:index.php?page=product&id='.$product["idproduct"]);    
+  }
 }
 else{
-
-die ('Product does not exist');
+  die ('Product does not exist');
 }
 }
 

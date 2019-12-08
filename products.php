@@ -7,8 +7,9 @@ template_header('products');
 	<ul>
     <?php 
         
-    	$query_producttable = "SELECT name, description, price, inventory, idproduct, image FROM products";
-    	$result_producttable = $conn->query($query_producttable);
+    	$query_producttable = $conn -> prepare("SELECT name, description, price, inventory, idproduct, image FROM products");
+        $query_producttable -> execute();
+    	$result_producttable = $query_producttable -> get_result();
     	
     	if ($result_producttable->num_rows > 0) {
 

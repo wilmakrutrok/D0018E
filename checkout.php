@@ -13,30 +13,31 @@ $uid = mysqli_fetch_array($result_uid);*/
 //Här hämtar jag ut alla produkter som finns i kundkorgen.
 //Priset borde hämtas från cartproductstabellen men den är
 //null där så hämtar från products direkt för nu
-$query_cart = "
+$query_cart = $conn->prepare("
   SELECT  products.description, products.image, products.idproduct, products.name, products.price, products.inventory, carttouser.idcart, cartproducts.amount
   FROM carttouser
   INNER JOIN cartproducts
     ON carttouser.idcart = cartproducts.idcart
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
-  WHERE carttouser.iduser = '".$iduser."'";
-$result_cart = $conn->query($query_cart);
+  WHERE carttouser.iduser = ?");
+$query_cart->bind_param('i', $iduser);
+$query_cart->execute();
+$result_cart = $query_cart->get_result();
+
 //Enters when pay button is pressed
 if(isset($_POST['pay_button'])){
-    $conn->autocommit(false);
-    //Create a new order. IDorder is incremented automatically
-    //so each new order is unique
-    $todaysdate = date("Y-m-d");
-    $query_create_order = $conn->prepare("INSERT INTO orders(iduser, totalprice, date)
-                                        VALUES(?, ?, ?)");
-    $query_create_order->bind_param('ids',$iduser, $_POST['totalprice'], $todaysdate);
-    $query_create_order->execute();
-    
-    //Use the generated IDorder to update orderproducts
-    $order_id = $conn->insert_id;
-    //Inserting products from cart to orders
-    $stmt =$conn->prepare("INSERT INTO orderproducts
+  $conn->autocommit(false);
+  //Create a new order. IDorder is incremented automatically
+  //so each new order is unique
+  $todaysdate = date("Y-m-d");
+  $query_create_order = $conn->prepare("INSERT INTO orders(iduser, totalprice, date) VALUES(?, ?, ?)");
+  $query_create_order->bind_param('ids',$iduser, $_POST['totalprice'], $todaysdate);
+  $query_create_order->execute(); 
+  //Use the generated IDorder to update orderproducts
+  $order_id = $conn->insert_id;
+  //Copying all info from a users cart in to orders
+  $stmt =$conn->prepare("INSERT INTO orderproducts
   SELECT orders.idorder, cartproducts.idproduct, cartproducts.amount, cartproducts.price
   FROM orders
   INNER JOIN carttouser
@@ -46,30 +47,24 @@ if(isset($_POST['pay_button'])){
   INNER JOIN products
     ON cartproducts.idproduct = products.idproduct
   WHERE orders.idorder = ?");
-    $stmt->bind_param('i', $order_id);
-    $stmt->execute();
-    
-    //Change inventory
-    $query_products_in_cart = "
-  SELECT  products.idproduct, cartproducts.amount
-  FROM carttouser
-  INNER JOIN cartproducts
-    ON carttouser.idcart = cartproducts.idcart
-  INNER JOIN products
-    ON cartproducts.idproduct = products.idproduct
-  WHERE carttouser.iduser = '".$iduser."'";
-    $result_products_in_cart = $conn->query($query_products_in_cart);
-    if($result_products_in_cart->num_rows > 0){
-        while($cart = $result_products_in_cart->fetch_assoc()){
-            $change_inventory = "
-              UPDATE products
-              SET inventory = inventory - '".$cart['amount']."'
-              WHERE idproduct = '".$cart["idproduct"]."'";
-            mysqli_query($conn, $change_inventory);
-        }
-    }
-    //Emptying all the products in the cart
-    $delete_cart = $conn->prepare("
+  $stmt->bind_param('i', $order_id);
+  $stmt->execute();
+  //Changing the inventory of the selected products.
+  //Reusing the query_cart statement
+  $query_cart->execute();
+  $result_products_in_cart = $query_cart->get_result();
+  if($result_products_in_cart->num_rows > 0){
+    $change_inventory = $conn->prepare("
+      UPDATE products
+      SET inventory = inventory - ?
+      WHERE idproduct = ?");
+      while($cart = $result_products_in_cart->fetch_assoc()){
+        $change_inventory -> bind_param('ii', $cart['amount'], $cart["idproduct"]);
+        $change_inventory -> execute();
+      }
+  }
+  //Emptying all the products in the cart
+  $delete_cart = $conn->prepare("
   DELETE  cartproducts
   FROM cartproducts
   INNER JOIN carttouser
@@ -82,13 +77,15 @@ if(isset($_POST['pay_button'])){
     header('Location: index.php?page=checkout');
 }
 if(isset($_POST['change'])){
-    //Chech so enough in inventory
+    //Check so enough is in inventory
     if($_POST["amount"] <= $_POST['inventory']){
         //Adding the product to the cart that belongs to the user, if product already in cart update the amount
-        $add_product_query="UPDATE cartproducts
-                            SET amount = '".$_POST["amount"]."'
-                            WHERE idcart = '".$_POST['idcart']."' AND idproduct = '".$_POST["idproduct"]."'";
-        $result_add = mysqli_query($conn,$add_product_query);
+        $add_product_query= $conn->prepare("UPDATE cartproducts
+                            SET amount = ?
+                            WHERE idcart = ? AND idproduct = ?");
+        $add_product_query->bind_param('iii',$_POST["amount"], $_POST['idcart'], $_POST["idproduct"]);
+        $add_product_query->execute();
+        //$result_add = mysqli_query($conn,$add_product_query);
         header('Location: index.php?page=checkout');
     }else{
         echo "Not enough in inventory";
@@ -96,9 +93,11 @@ if(isset($_POST['change'])){
 }
 if(isset($_POST['remove'])){
     //Adding the product to the cart that belongs to the user, if product already in cart update the amount
-    $delete_product_query="DELETE FROM cartproducts
-                            WHERE idcart = '".$_POST['idcart']."' AND idproduct = '".$_POST["idproduct"]."'";
-    $result_delete = mysqli_query($conn,$delete_product_query);
+    $delete_product_query= $conn->prepare("DELETE FROM cartproducts
+                            WHERE idcart = ? AND idproduct = ?");
+    $delete_product_query->bind_param('ii', $_POST['idcart'], $_POST["idproduct"]);
+    $delete_product_query->execute();
+   // $result_delete = mysqli_query($conn,$delete_product_query);
     header('Location: index.php?page=checkout');
 }
 ?>

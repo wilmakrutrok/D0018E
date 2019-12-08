@@ -22,7 +22,7 @@
         $stmt->bind_param('iisss',$_POST['price'], $_POST['inventory'], $_POST['name'], $_POST['description'], $fileNameNew);
         $stmt->execute();
         header('Location: index.php?page=admin');
-}
+}/*
 if(isset($_POST["edit"]) && $_POST["newinventory"] != ""){
     $stmt = "
             UPDATE products
@@ -57,6 +57,47 @@ if(isset($_POST["delete_review"])){
     $delete_review = "DELETE FROM review
             WHERE idreview = '".$_POST['idreview']."'";
     $review_deleted = mysqli_query($conn, $delete_review);
+}*/
+if(isset($_POST["edit"]) && $_POST["newinventory"] != ""){
+    $stmt = $conn->prepare("
+            UPDATE products
+            SET inventory = ?
+            WHERE idproduct = ?");
+    $stmt->bind_param('ii',$_POST['newinventory'],$_POST['idproduct'] );
+    $stmt->execute();
+}
+
+if(isset($_POST["edit"]) && $_POST["newname"] != ""){
+    $stmt =$conn->prepare("
+            UPDATE products
+            SET name = ?
+            WHERE idproduct = ?");
+    $stmt->bind_param('si',$_POST['newname'], $_POST['idproduct']);
+    $stmt->execute();
+}
+
+if(isset($_POST["edit"]) && $_POST["newprice"] != ""){
+    $stmt = $conn->prepare("
+            UPDATE products
+            SET price = ?
+            WHERE idproduct = ?");
+    $stmt->bind_param('ii',$_POST['newprice'], $_POST['idproduct']);
+    $stmt->execute();
+}
+
+if(isset($_POST["delete"])){
+    $stmt = "DELETE FROM products
+            WHERE idproduct = ?";
+    $stmt->bind_param('i', $_POST['idproduct']);
+    $stmt->execute();
+}
+
+
+if(isset($_POST["delete_review"])){
+    $stmt = $conn->prepare("DELETE FROM review
+            WHERE idreview = ?");
+    $stmt->bind_param('i',$_POST['idreview']);
+    $stmt->execute();
 }
 ?>
 <div class="container" style="margin-bottom: 600px">
@@ -97,11 +138,10 @@ if(isset($_POST["delete_review"])){
     <div class="products">
     <h1>Edit product</h1>
     	<ul>
-        <?php 
-            
-        	$query_producttable = "SELECT name, description, price, inventory, idproduct, image FROM products";
-        	$result_producttable = $conn->query($query_producttable);
-        	
+        <?php
+            $query_producttable = $conn->prepare("SELECT name, description, price, inventory, idproduct, image FROM products");
+            $query_producttable->execute();
+            $result_producttable = $query_producttable->get_result();
         	if ($result_producttable->num_rows > 0) {
     
         	    while($product = $result_producttable->fetch_assoc()) {
@@ -129,8 +169,9 @@ if(isset($_POST["delete_review"])){
     	<h2>Reviews</h2>
     	<ul>
         <?php 
-            $query_reviews = "SELECT * FROM review";
-        	$result_reviews = $conn->query($query_reviews);
+            $query_reviews = $conn->prepare("SELECT * FROM review");
+            $query_reviews->execute();
+        	$result_reviews = $query_reviews->get_result();
         	
         	if ($result_reviews->num_rows > 0) {
     

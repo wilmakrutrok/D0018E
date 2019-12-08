@@ -5,8 +5,10 @@ template_header('product');
 
 if (isset($_GET['id'])) {
 
-    $stmt = "SELECT * FROM products WHERE idproduct = '".$_GET['id']."'";
-    $result = mysqli_query($conn, $stmt);
+    $stmt = $conn->prepare("SELECT * FROM products WHERE idproduct = ?");
+    $stmt -> bind_param('i', $_GET['id']);
+    $stmt -> execute();
+    $result = $stmt -> get_result();
     $product = mysqli_fetch_array($result);
 
     if (!$product) {
@@ -30,27 +32,36 @@ if(isset($_POST['add'])){
     //Chech so enough in inventory
     if($_POST["amount"] <= $product['inventory']){
         //Search if user has a cart. If no is found one is created.
-        $count_query = "select count(*) as cntUser from carttouser where iduser='".$iduser."'";
-        $result = mysqli_query($conn, $count_query);
-        $row = mysqli_fetch_array($result);
+        $count_query = $conn->prepare("select count(*) as cntUser from carttouser where iduser= ?");
+        $count_query -> bind_param('i', $iduser);
+        $count_query -> execute();
+        $result = $count_query -> get_result();
+        //$row = mysqli_fetch_array($result);
+        $row = $result -> fetch_assoc();
         $count = $row['cntUser'];
         
         if($count == 0){
-            $query_adduser = "INSERT INTO carttouser (iduser) VALUES ('".$iduser."')";
-            $result_add = mysqli_query($conn,$query_adduser);
+            $query_adduser = $conn -> prepare("INSERT INTO carttouser (iduser) VALUES (?)");
+            $query_adduser -> bind_param('i', $iduser);
+            $query_adduser -> execute();
+            $result_add = $query_adduser -> get_result();
         }
         
         //Find Cart ID for the user
-        $query_getCartID = "SELECT idcart from carttouser where iduser='".$iduser."' ";
-        $result = mysqli_query($conn, $query_getCartID);
-        $cartid = mysqli_fetch_array($result);
-        
+        $query_getCartID = $conn -> prepare("SELECT idcart from carttouser where iduser= ?");
+        $query_getCartID -> bind_param('i', $iduser);
+        $query_getCartID -> execute();
+        $result = $query_getCartID -> get_result();
+        //$cartid = mysqli_fetch_array($result);
+        $cartid = $result -> fetch_assoc();
         //Adding the product to the cart that belongs to the user, if product already in cart update the amount
-        $add_product_query="INSERT INTO cartproducts (idcart, idproduct, amount, price)
-                                    VALUES ('".$cartid['idcart']."', '".$_POST["idproduct"]."', '".$_POST["amount"]."', '".$product['price']."')
+        $add_product_query = $conn -> prepare("INSERT INTO cartproducts (idcart, idproduct, amount, price)
+                                    VALUES (?, ?, ?, ?)
                                     ON DUPLICATE KEY UPDATE amount = 
-                                    IF((amount + '".$_POST["amount"]."') <= '".$product['inventory']."', amount + '".$_POST["amount"]."', amount)";
-        $result_add = mysqli_query($conn,$add_product_query);
+                                    IF((amount + ?) <= ?, amount + ?, amount)");
+        $add_product_query -> bind_param('iiidiii', $cartid['idcart'],  $_POST["idproduct"], $_POST["amount"], $product['price'], $_POST["amount"], $product['inventory'], $_POST["amount"]);
+        $add_product_query -> execute();
+        $result_add = $add_product_query ->get_result();
     }else{
         echo "Not enough in inventory";
     }
@@ -59,8 +70,10 @@ if(isset($_POST['add'])){
 if (isset($_POST["send_review"])) {
     //Check if rate and comment given
     if(isset($_POST["rate"]) && $_POST["review"] != ""){
-    $query_adduser = "INSERT INTO review (idproduct, grade, comment) VALUES ('".$product['idproduct']."', '".$_POST["rate"]."', '".$_POST["review"]."')";
-    $result_add = mysqli_query($conn,$query_adduser);
+        $query_adduser = $conn -> prepare("INSERT INTO review (idproduct, grade, comment) VALUES (?, ?, ?)");
+        $query_adduser -> bind_param('iis', $product['idproduct'], $_POST["rate"], $_POST["review"]);
+        $query_adduser -> execute();
+        $result_add = $query_adduser -> get_result();
     }
     else{
         echo "No rate or no comment given";
@@ -96,11 +109,12 @@ if (isset($_POST["send_review"])) {
 	<ul>
     <?php 
         
-    $query_reviews = "SELECT comment, grade FROM review WHERE idproduct = '".$product["idproduct"]."'";
-    	$result_reviews = $conn->query($query_reviews);
+    $query_reviews = $conn -> prepare("SELECT comment, grade FROM review WHERE idproduct = ?");
+    $query_reviews -> bind_param('i', $product["idproduct"]);
+    $query_reviews -> execute();
+    	$result_reviews = $query_reviews -> get_result();
     	
     	if ($result_reviews->num_rows > 0) {
-
     	    while($review = $result_reviews->fetch_assoc()) {
                 ?>
                 <li>
