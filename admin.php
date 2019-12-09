@@ -86,8 +86,8 @@ if(isset($_POST["edit"]) && $_POST["newprice"] != ""){
 }
 
 if(isset($_POST["delete"])){
-    $stmt = "DELETE FROM products
-            WHERE idproduct = ?";
+    $stmt = $conn -> prepare("DELETE FROM products
+            WHERE idproduct = ?");
     $stmt->bind_param('i', $_POST['idproduct']);
     $stmt->execute();
 }
