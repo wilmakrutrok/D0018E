@@ -23,12 +23,12 @@
     }
     
     function template_header($title){
-        
+        /*
         if(isset($_POST['submit'])){
             $_SESSION['loggedin'] = false;
             header('Location: index.php');
         }
-        
+        */
         echo '
     <!DOCTYPE html>
     	<head>
