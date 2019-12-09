@@ -1,14 +1,14 @@
 <?php 
     $servername = "localhost";
     $user = "root";
-    $password = "password";
+    $password = "";
     
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
         }
-
-    $db_name = "test";
+    
+    $db_name = "d0018e";
     $db = mysqli_select_db($conn, $db_name);     
 
     function logged_in(){
@@ -24,11 +24,11 @@
     
     function template_header($title){
         /*
-        if(isset($_POST['submit'])){
-            $_SESSION['loggedin'] = false;
-            header('Location: index.php');
-        }
-        */
+         if(isset($_POST['submit'])){
+         $_SESSION['loggedin'] = false;
+         header('Location: index.php');
+         }
+         */
         echo '
     <!DOCTYPE html>
     	<head>
@@ -91,5 +91,15 @@
             </div>
         ';
     }
-    ?>
     
+    function admin_menu(){
+    echo '
+    <h1 style="text-align: center; margin-top: 100px;">Admin page</h1>
+    <ul style="width: 410px; margin: auto;">
+        <li style="text-align: center"><a href="index.php?page=admin">Home</a></li>
+        <li style="text-align: center"><a href="index.php?page=adminNewProduct">Add product</a></li>
+        <li style="text-align: center"><a href="index.php?page=adminEditProduct">Edit product</a></li>
+        <li style="text-align: center"><a href="index.php?page=adminDeleteReview">Reviews</a></li>
+    </ul><br><br>';
+    }
+    ?>
