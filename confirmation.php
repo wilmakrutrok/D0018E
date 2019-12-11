@@ -5,20 +5,33 @@ template_header('checkout');
 //Hämtar först ut användarens id
 $uname = $_SESSION['uname'];
 $iduser = $_SESSION['iduser'];
-    $stmt = $conn->prepare("SELECT * FROM orders WHERE idorder = ?");
-    $stmt -> bind_param('i', $_GET['order_id']);
-    $stmt -> execute();
-    $result = $stmt -> get_result();
-   // echo $_GET['order_id'];
-    /*
-    if (!$_GET['order_id']) {
-        die ('Order does not exist');
-    } 
-    else {
-      die ('Product does not exist');
-    }
-    */
-?>
+$idorder = $_GET['orderid']; 
+
+/*
+$query_order = $conn->prepare("SELECT * FROM orders
+  INNER JOIN orderproducts
+  ON orders.idorder = orderproducts.idorder
+  WHERE orders.idorder = ?");
+$query_order -> bind_param('i', $idorder);
+$query_order -> execute();
+$result = $query_order -> get_result();
+*/
+$query_order = $conn->prepare("SELECT * FROM orders WHERE idorder = ?");
+$query_order -> bind_param('i', $idorder);
+$query_order -> execute();
+
+$queryorderproducts = $conn->prepare("SELECT * FROM ordersproducts WHERE idorder = ?");
+$queryorderproducts -> bind_param('i', $idorder);
+$queryorderproducts->execute();
+
+
+
+
+$query_order->get_result();
+$order = $query_order->fetch_assoc();
+$query_orderproducts->get_result();
+
+if ($orderproducts->num_rows > 0) { ?>
   <div class="container_cart" style="margin-bottom:200px">
     <div class="div_cart_content">
       <div class="checkout_page">
@@ -27,28 +40,31 @@ $iduser = $_SESSION['iduser'];
     </div>
     </div>
     <div>
-      <ul>
-        <li class = order_info>Order ID</li>
-        <li class = order_info>Date </li>
-      </ul>
-          <table class="checkout_table">
-        <thead class="cart_header">
-       <tr>
-          <td class="cart_products">Item</td>
-          <td>Price</td>
-          <td>Quantity</td>
-          <td>Total</td>
-       </tr>
-     </thead>
-      <tbody>
-        <tr>
-          <td>
-          </td>
-          <td>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <table>
+            <thead>
+                <tr>
+                <td>Order ID</td>
+                </tr>
+                <tr>
+                  <td><?php echo $order['idorder'] ?></td>
+                </tr>
+          </thead>
+            <?php
+          while($orderproducts = $query_orderproducts->fetch_assoc()) { ?>
+
+                <td>
+                  <tr>
+                    <td>Product:</td>
+                    <td>Amount:</td>
+                    <td>Price:</td>
+                  </tr>
+                          <tr>
+                          <td><?php echo $orderproducts["name"]?></td>
+                          <td><?php echo $orderproducts["amount"]?></td>
+                          <td><?php echo $orderproducts["price"]." :-"?></td>
+                          <?php 
+                      }}
+                  ?>
   </div>
   </div>
 </div> 

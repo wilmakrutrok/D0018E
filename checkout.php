@@ -27,7 +27,9 @@ $result_cart = $query_cart->get_result();
 
 //Enters when pay button is pressed
 if(isset($_POST['pay_button'])){
-  $conn->autocommit(false);
+
+  //$conn->autocommit(false);
+  $conn->begin_transaction();
   //Create a new order. IDorder is incremented automatically
   //so each new order is unique
   $todaysdate = date("Y-m-d");
