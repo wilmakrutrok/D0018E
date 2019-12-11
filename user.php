@@ -43,10 +43,8 @@
                         <td>Price:</td>
                     </tr>
     	        	<?php 
-    	        	$query_orderproducts = $conn -> prepare("SELECT products.name, orderproducts.amount, orderproducts.price 
+    	        	$query_orderproducts = $conn -> prepare("SELECT name, amount, price 
                                         FROM orderproducts 
-                                        INNER JOIN products
-                                        ON orderproducts.idproduct = products.idproduct
                                         WHERE idorder = ?");
                     $query_orderproducts -> bind_param('i', $order['idorder']);
                     $query_orderproducts -> execute();

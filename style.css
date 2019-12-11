@@ -241,3 +241,7 @@ footer {
 
 }
 .upload_picture{height: 90%;}
+
+.order_info {
+	display: block;
+}

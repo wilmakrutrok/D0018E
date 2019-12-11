@@ -38,7 +38,7 @@ if(isset($_POST['pay_button'])){
   $order_id = $conn->insert_id;
   //Copying all info from a users cart in to orders
   $stmt =$conn->prepare("INSERT INTO orderproducts
-  SELECT orders.idorder, cartproducts.idproduct, cartproducts.amount, cartproducts.price
+  SELECT orders.idorder, cartproducts.idproduct, cartproducts.amount, cartproducts.price, products.name
   FROM orders
   INNER JOIN carttouser
   on orders.iduser = carttouser.iduser
@@ -74,7 +74,7 @@ if(isset($_POST['pay_button'])){
     $delete_cart->execute();
     $conn->commit();
     //Sends the user back to checkout page
-    header('Location: index.php?page=checkout');
+    header('Location: index.php?page=confirmation&orderid='.$order_id.'');
 }
 if(isset($_POST['change'])){
     //Check so enough is in inventory
