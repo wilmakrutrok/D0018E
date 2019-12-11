@@ -22,9 +22,11 @@ if(isset($_POST['search'])){
 
 <div id="background">
 	<h1>The store</h1>
-	<p style="margin-top: -120px; color: black"><form action="" method="post">
-<input type="text" name="search">
-<input type="submit" name="submit2" value="Search">
-</form></p>
+<p style="margin-top: -120px; color: black">
+    <form action="" method="post">
+        <input type="text" name="search">
+        <input type="submit" name="submit2" value="Search">
+    </form>
+</p>
 </div>
 <?php template_footer(); ?>
