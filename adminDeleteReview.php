@@ -16,7 +16,7 @@ if(isset($_POST["delete_review"])){
 <br>
     	<ul>
         <?php 
-            $query_reviews = $conn->prepare("SELECT * FROM review");
+            $query_reviews = $conn->prepare("SELECT review.grade, review.idreview, review.comment, products.name FROM review INNER JOIN products ON review.idproduct = products.idproduct");
             $query_reviews->execute();
         	$result_reviews = $query_reviews->get_result();
         	
@@ -25,6 +25,7 @@ if(isset($_POST["delete_review"])){
         	    while($review = $result_reviews->fetch_assoc()) {
                     ?>
                     <li>
+                    	Product: <?php echo $review["name"]?><br>
         	        	Rate: <?php echo $review["grade"]?><br>
         	        	Comment: <?php echo $review["comment"]?><br>
         	        	<form method="post">
