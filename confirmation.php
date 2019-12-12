@@ -7,7 +7,7 @@ $uname = $_SESSION['uname'];
 $iduser = $_SESSION['iduser'];
 $idorder = $_GET['orderid']; 
 
-if(isset($_POST['Home'])){
+if(isset($_POST['submit2'])){
    header('Location:index.php?page=home');
 }
 
