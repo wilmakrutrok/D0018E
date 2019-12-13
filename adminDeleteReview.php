@@ -2,6 +2,7 @@
 admin_verify();
 template_header('reviews');
 
+//Delete choosen review
 if(isset($_POST["delete_review"])){
     $stmt = $conn->prepare("DELETE FROM review
             WHERE idreview = ?");
@@ -20,6 +21,7 @@ if(isset($_POST["delete_review"])){
             $query_reviews->execute();
         	$result_reviews = $query_reviews->get_result();
         	
+            //Print out all reviews
         	if ($result_reviews->num_rows > 0) {
     
         	    while($review = $result_reviews->fetch_assoc()) {
