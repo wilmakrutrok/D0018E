@@ -16,17 +16,18 @@ admin_menu();
 </thead>
 <tbody>
 <?php 
-	//Print out 3 latest orders
-    	$query_orders = $conn -> prepare("SELECT idorder, iduser, totalprice, date FROM orders");
+	//Print out latest orders
+    	$query_orders = $conn -> prepare("SELECT orders.idorder, orders.iduser, orders.totalprice, orders.date, users.username FROM orders
+                                        inner join users 
+                                        on orders.iduser = users.iduser");
         $query_orders -> execute();
     	$result_orders = $query_orders -> get_result();
-    	$orderNumber = 1;
     	if ($result_orders->num_rows > 0) {
-    	    while(($order = $result_orders->fetch_assoc()) && ($orderNumber <= 3)) {
+    	    while($order = $result_orders->fetch_assoc() ) {
     	  
                 ?><tr>
                 	<td><?php echo $order["date"]?></td>
-                	<td><?php echo $order["iduser"].", "."name here"?></td>
+                	<td><?php echo $order["iduser"].", ".$order['username']?></td>
     	        	<td><?php echo $order["totalprice"]." :-"?></td>
     	        	<td><table><tr>
                     	<td>Product:</td>
@@ -56,7 +57,6 @@ admin_menu();
     	    	</table>
     	    	</td>
   			<?php 
-  			$orderNumber = $orderNumber + 1;
     	    }   
     	}
         ?>
