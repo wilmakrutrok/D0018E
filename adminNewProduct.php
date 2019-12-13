@@ -2,6 +2,7 @@
 admin_verify();
 template_header('newProduct');
 
+//Create a new product in database
 if(isset($_POST['submit'])){
     $file = $_FILES['image'];
     $fileName = $_FILES['image']['name'];
