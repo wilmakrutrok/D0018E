@@ -12,7 +12,7 @@ template_header('products');
     	$result_producttable = $query_producttable -> get_result();
     	
     	if ($result_producttable->num_rows > 0) {
-
+	    //Show information about product
     	    while($product = $result_producttable->fetch_assoc()) {
                 ?>
                 <li>
