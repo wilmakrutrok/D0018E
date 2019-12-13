@@ -2,6 +2,7 @@
 logged_in();
 template_header('home');
 
+//Search for product
 if(isset($_POST['search'])){
     $search_value=$_POST["search"];
     $the_product = $conn->prepare("SELECT * from products where name = ?");
@@ -14,7 +15,6 @@ if(isset($_POST['search'])){
         }
     }
     else{
-        //die ('Product does not exist');
         header('Location:index.php?page=home');
     }
 }
