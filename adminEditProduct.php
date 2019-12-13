@@ -2,6 +2,7 @@
 admin_verify();
 template_header('editProduct');
 
+//If new inventory given - update inventory for product
 if(isset($_POST["edit"]) && $_POST["newinventory"] != ""){
     $stmt = $conn->prepare("
             UPDATE products
@@ -10,6 +11,8 @@ if(isset($_POST["edit"]) && $_POST["newinventory"] != ""){
     $stmt->bind_param('ii',$_POST['newinventory'],$_POST['idproduct'] );
     $stmt->execute();
 }
+
+//If new name given - update name for product
 if(isset($_POST["edit"]) && $_POST["newname"] != ""){
     $stmt =$conn->prepare("
             UPDATE products
@@ -18,6 +21,8 @@ if(isset($_POST["edit"]) && $_POST["newname"] != ""){
     $stmt->bind_param('si',$_POST['newname'], $_POST['idproduct']);
     $stmt->execute();
 }
+
+//If new price given - update price for product
 if(isset($_POST["edit"]) && $_POST["newprice"] != ""){
     $stmt = $conn->prepare("
             UPDATE products
@@ -26,6 +31,8 @@ if(isset($_POST["edit"]) && $_POST["newprice"] != ""){
     $stmt->bind_param('ii',$_POST['newprice'], $_POST['idproduct']);
     $stmt->execute();
 }
+
+//Delete choosen product
 if(isset($_POST["delete"])){
     $stmt = $conn -> prepare("DELETE FROM products
             WHERE idproduct = ?");
@@ -34,6 +41,7 @@ if(isset($_POST["delete"])){
 }
 ?>
 
+<!--Check so user have admin rights-->
 <?php admin_menu(); ?>
 
 <div class="products">
@@ -43,7 +51,7 @@ if(isset($_POST["delete"])){
             $query_producttable->execute();
             $result_producttable = $query_producttable->get_result();
         	if ($result_producttable->num_rows > 0) {
-    
+                //Print out all product information in input fields so user can change values
         	    while($product = $result_producttable->fetch_assoc()) {
                     ?>
                     <li>
