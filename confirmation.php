@@ -10,7 +10,7 @@ $idorder = $_GET['orderid'];
 if(isset($_POST['submit2'])){
    header('Location:index.php?page=home');
 }
-
+//Query that returns info about the order (orderid, date and totalprice)
 $query_orders = $conn -> prepare("SELECT * FROM orders WHERE idorder = ?");
 $query_orders -> bind_param('i', $idorder);
 $query_orders -> execute();
@@ -32,6 +32,7 @@ if ($result_orders->num_rows > 0) {
     <td>Date</td>
     <td>Total Price</td>
   </tr>
+    <!-- Display info about the order-->
     <tr>
     <td><?php echo $order['idorder'] ?></td>
     <td><?php echo $order['date'] ?></td>
@@ -44,6 +45,7 @@ if ($result_orders->num_rows > 0) {
     <td>Price:</td>
   </tr>
       <?php 
+      //Get all the products that corresponds to the orderid
       $query_orderproducts = $conn -> prepare("
                               SELECT name, amount, price 
                               FROM orderproducts 
