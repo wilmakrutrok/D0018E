@@ -3,6 +3,7 @@
     $user = "root";
     $password = "";
     
+    //Setting up a new connection to the server and database
     $conn = new mysqli($servername, $user, $password);
         if($conn->connect_error){
             die("Connection failed: ". $conn->connect_error);
@@ -11,17 +12,21 @@
     $db_name = "d0018e";
     $db = mysqli_select_db($conn, $db_name);     
 
+    //If user not logged in it can't reach other pages than log in
     function logged_in(){
         if($_SESSION['loggedin'] != true){
             header('Location: index.php');
         }
     }
+
+    //If user don't have an admin role it can't reach the admin page
     function admin_verify(){
         if($_SESSION['admin'] != true){
             header('Location: index.php');
         }
     }
     
+    //Header menu for all pages
     function template_header($title){
         /*
          if(isset($_POST['submit'])){
@@ -52,6 +57,8 @@
             <main>
         ';
     }
+
+    //Footer for all pages
     function template_footer(){
         echo '
             </main>
@@ -92,6 +99,7 @@
         ';
     }
     
+    //Admins page
     function admin_menu(){
     echo '
     <h1 style="text-align: center; margin-top: 100px;">Admin page</h1>
