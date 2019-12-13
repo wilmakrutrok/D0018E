@@ -11,27 +11,6 @@ if(isset($_POST['submit2'])){
    header('Location:index.php?page=home');
 }
 
-/*
-$query_order = $conn->prepare("SELECT * FROM orders
-  INNER JOIN orderproducts
-  ON orders.idorder = orderproducts.idorder
-  WHERE orders.idorder = ?");
-$query_order -> bind_param('i', $idorder);
-$query_order -> execute();
-$result = $query_order -> get_result();
-*/
-/*
-$query_order = $conn->prepare("SELECT * FROM orders WHERE idorder = ?");
-$query_order->bind_param('i', $idorder);
-$query_order->execute();
-$query_order->get_result();
-
-$query_orderproducts = $conn->prepare("SELECT * FROM orderproducts WHERE idorder = ?");
-$query_orderproducts->bind_param('i', $idorder);
-$query_orderproducts->execute();
-$query_orderproducts->get_result();
-?>
-*/
 $query_orders = $conn -> prepare("SELECT * FROM orders WHERE idorder = ?");
 $query_orders -> bind_param('i', $idorder);
 $query_orders -> execute();
