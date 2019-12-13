@@ -2,7 +2,7 @@
 logged_in();
 template_header('product');
 
-
+// Get information about product
 if (isset($_GET['id'])) {
 
     $stmt = $conn->prepare("SELECT * FROM products WHERE idproduct = ?");
@@ -20,14 +20,10 @@ if (isset($_GET['id'])) {
 
 $uname = $_SESSION['uname'];
 
-//find user ID
-/*$query_getuid= "select iduser from users where username='".$uname."'";
-$result_uid = mysqli_query($conn, $query_getuid);
-$uid = mysqli_fetch_array($result_uid);*/
-
 //Get user ID
 $iduser = $_SESSION['iduser'];
 
+//Add product to cart
 if(isset($_POST['add'])){
     //Chech so enough in inventory
     if($_POST["amount"] <= $product['inventory']){
@@ -85,7 +81,7 @@ if (isset($_POST["send_review"])) {
 	<img src="<?php echo $product["image"]?>">
     <form method="post">
         <h1><?php echo $product["name"]?></h1>
-
+	<!-- Let the user choose amount between 1-5 -->
         <?php echo $product["price"]." :-"?><br>
           <select name="amount">
             <option value="1">1</option>
@@ -108,7 +104,7 @@ if (isset($_POST["send_review"])) {
 	<h2>Reviews</h2>
 	<ul>
     <?php 
-        
+    //Show reviews for product
     $query_reviews = $conn -> prepare("SELECT comment, grade FROM review WHERE idproduct = ?");
     $query_reviews -> bind_param('i', $product["idproduct"]);
     $query_reviews -> execute();
