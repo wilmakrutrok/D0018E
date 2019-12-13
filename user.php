@@ -18,23 +18,16 @@
         
         $iduser = $_SESSION['iduser'];
         
-        //find user ID
-        /*$query_getuid= "select iduser from users where username='".$uname."'";
-        $result_uid = mysqli_query($conn, $query_getuid);
-        $uid = mysqli_fetch_array($result_uid);*/
-
+	//Get all orders for user
     	$query_orders = $conn -> prepare("SELECT idorder, totalprice, date FROM orders WHERE iduser = ?");
         $query_orders -> bind_param('i', $iduser);
         $query_orders -> execute();
     	$result_orders = $query_orders -> get_result();
     	
     	if ($result_orders->num_rows > 0) {
-
+	    //Print orderinformation one order at the time
     	    while($order = $result_orders->fetch_assoc()) {
-    	        
-
-    	        
-                ?><tr>
+                ?><tr>	
                 	<td><?php echo $order["date"]?></td>
     	        	<td><?php echo $order["totalprice"]." :-"?></td>
     	        	<td><table><tr>
@@ -43,6 +36,7 @@
                         <td>Price:</td>
                     </tr>
     	        	<?php 
+			//Get specific order information for each order
     	        	$query_orderproducts = $conn -> prepare("SELECT name, amount, price 
                                         FROM orderproducts 
                                         WHERE idorder = ?");

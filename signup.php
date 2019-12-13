@@ -1,7 +1,7 @@
 <?php 
 template_header_login('signup');
 
-
+//Creating new user account if username don't exist in database and password match
 if(isset($_POST['submit'])){
     $uname=$_POST['username'];
     $password=$_POST['password'];
