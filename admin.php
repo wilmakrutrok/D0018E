@@ -16,6 +16,7 @@ admin_menu();
 </thead>
 <tbody>
 <?php 
+	//Print out 3 latest orders
     	$query_orders = $conn -> prepare("SELECT idorder, iduser, totalprice, date FROM orders");
         $query_orders -> execute();
     	$result_orders = $query_orders -> get_result();
@@ -65,7 +66,8 @@ admin_menu();
 </div>
 <div style="float: left;">
 <h3>Products out of stock:</h3>
-<?php $query_empty = $conn -> prepare("SELECT name, price FROM products WHERE inventory = 0");
+<?php 	//Print out products that are sold out
+	$query_empty = $conn -> prepare("SELECT name, price FROM products WHERE inventory = 0");
         $query_empty -> execute();
     	$result_empty = $query_empty -> get_result();
     	if ($result_empty->num_rows > 0) {
