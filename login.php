@@ -1,10 +1,6 @@
 <?php
 template_header_login('login');
 if(isset($_POST['submit'])){
-    /*
-    $uname = mysqli_real_escape_string($conn,$_POST['username']);
-    $password = mysqli_real_escape_string($conn,$_POST['password']);
-    */
     $uname = $_POST['username'];
     $password = $_POST['password'];
     //check if username and password is entered and searches
@@ -35,16 +31,18 @@ if(isset($_POST['submit'])){
                 $query_getUid ->bind_param('s', $uname);
                 $query_getUid ->execute();
                 $result_getUid = $query_getUid->get_result();
-                //$uid = mysqli_fetch_array($result_getUid);
                 $uid = $result_getUid->fetch_assoc();
                 $iduser = $uid['iduser'];
-                $_SESSION['iduser'] = $iduser;
                 
+                $_SESSION['iduser'] = $iduser;
                 $_SESSION['uname'] = $uname;
+                
+                //Direct user to page depending on role
                 if($row['role']=='user'){
                     $_SESSION['loggedin'] = true;
                     header('Location: index.php?page=home');
                 }
+                
                 else if ($row['role']=='admin'){
                     $_SESSION['admin']=true;
                     $_SESSION['loggedin'] = true;
